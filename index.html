@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="What appears under the site name in Google search results" />
+  <title>Zelkyr</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Grain overlay -->
+  <div class="grain"></div>
+
+  <!-- Side border strips -->
+  <canvas id="border-left" class="border-canvas border-side border-left"></canvas>
+  <canvas id="border-right" class="border-canvas border-side border-right"></canvas>
+
+  <!-- Top border strip -->
+  <canvas id="border-top" class="border-canvas border-top"></canvas>
+
+  <div class="site-wrap">
+
+    <!-- Star seal -->
+      <!-- Star seal -->
+    <div class="star-wrap">
+      <img src="images/star.png" alt="seal" width="260"/>
+    </div>
+   <!-- <div class="star-wrap">
+      <canvas id="star-canvas" width="340" height="340"></canvas>
+    </div>
+    -->
+
+    <header class="site-header">
+      <div class="title-rule title-rule--top"></div>
+      <h1 class="site-title">Zelkyr</h1>
+      <div class="title-rule title-rule--bottom"></div>
+      <p class="site-subtitle">&#10022; &nbsp; A Ukrainian-made LGBTQ+ romantasy novel &nbsp; &#10022;</p>
+    </header>
+
+    <nav class="site-nav">
+      <a href="#synopsis">Synopsis</a>
+      <span class="nav-sep">✦</span>
+      <a href="#Read">Read</a>
+    </nav>
+
+    <div class="ornament-bar">
+      <canvas id="orn-bar" width="640" height="28"></canvas>
+    </div>
+
+    <section class="synopsis" id="synopsis">
+      <div class="section-head">
+        <span class="section-diamond"></span>
+        <span class="section-label">Synopsis</span>
+        <span class="section-diamond"></span>
+      </div>
+      <p>
+       Raised in a small hunter's village, 
+       Luk'yan has spent his whole life preparing –
+       body, mind, and soul — for initiation into the Order of Zorya. 
+       Following its teachings, he is certain of what is right, what is wrong, 
+       and what his place in the world ought to be: 
+       to stand between folk and darkness, guided by the holy light.
+       Then a Seer of the Order visits the village,
+       and he is everything Luk'yan had ever dreamed of. 
+       Could such a blessed coincidence be real? 
+       Luk'yan is about to find out.
+      </p>
+    </section>
+
+    <div class="mid-rule">
+      <span></span>
+      <span class="mid-glyph">✦</span>
+      <span></span>
+    </div>
+
+ <section id="Read">
+      <div class="section-head">
+        <span class="section-diamond"></span>
+        <span class="section-label">Read</span>
+        <span class="section-diamond"></span>
+      </div>
+
+      <div class="book">
+        <div class="book-head">
+          <span class="book-num">Book I</span>
+          <span class="book-title">The Order of Zorya: Herz</span>
+        </div>
+        <ul class="chapter-list">
+          <li class="chapter-coming">
+            <span class="ch-num">—</span>
+            <span class="ch-divider"></span>
+            <span class="ch-title">COMING SOON</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- When Book II exists, copy the entire book div above and paste here -->
+
+    </section>
+        <!-- Every <li> inside is one row. For every new chapter after that, copy that block, change chapter-01 to chapter-02, change I to II, and change the title
+       When ready, replace the placeholder below with code:
+        <li>
+          <a href="chapters/chapter-01.html" class="chapter-entry">
+            <span class="ch-num">I</span>
+            <span class="ch-divider"></span>
+            <span class="ch-title">Chapter Title</span>
+            <span class="ch-arrow">→</span>
+          </a>
+        </li>
+        -->
+
+
+    <div class="mid-rule">
+      <span></span>
+      <span class="mid-glyph">✦</span>
+      <span></span>
+    </div>
+
+    <footer class="site-footer">
+      <canvas id="footer-star" width="40" height="40"></canvas>
+      <p>&copy; <span id="yr"></span> &nbsp;·&nbsp; All rights reserved</p>
+    </footer>
+
+  </div>
+
+  <!-- Bottom border strip -->
+  <canvas id="border-bottom" class="border-canvas border-bottom"></canvas>
+
+  <script src="ornaments.js"></script>
+  <script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
