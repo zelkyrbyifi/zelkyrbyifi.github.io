@@ -48,18 +48,6 @@
       </div>
     </nav>
 
-    <!-- Mobile glossary overlay -->
-    <div class="glossary-overlay" id="glossaryOverlay">
-      <button class="glossary-overlay-close" onclick="closeOverlay()">✕</button>
-      <div class="glossary-overlay-label">Glossary</div>
-      <ul class="glossary-overlay-list">
-        <li><a href="gemstones.html">✦ &nbsp;Gemstones</a></li>
-        <!-- Add new glossary pages here:
-        <li><a href="newpage.html">✦ &nbsp;Page Name</a></li>
-        -->
-      </ul>
-    </div>
-
     <!-- Decorative star buffer — gives dropdown room to breathe -->
     <div class="star-buffer">
       <canvas id="star-canvas" width="140" height="140"></canvas>
@@ -142,31 +130,38 @@
 
   </div>
 
+  <!-- Mobile glossary overlay — hidden on desktop via CSS -->
+  <div class="glossary-overlay" id="glossaryOverlay" aria-hidden="true">
+    <button class="glossary-overlay-close" onclick="document.getElementById('glossaryOverlay').classList.remove('open')">✕</button>
+    <div class="glossary-overlay-label">Glossary</div>
+    <ul class="glossary-overlay-list">
+      <li><a href="gemstones.html">Gemstones</a></li>
+      <!-- Add new pages here: <li><a href="newpage.html">Page Name</a></li> -->
+    </ul>
+  </div>
+
   <!-- Bottom border strip -->
   <canvas id="border-bottom" class="border-canvas border-bottom"></canvas>
 
   <script>
     function toggleDropdown() {
-      if (window.innerWidth <= 640) {
-        // Mobile: open full overlay
-        document.getElementById('glossaryOverlay').classList.toggle('open');
+      // Use CSS breakpoint to decide behaviour
+      if (window.matchMedia('(max-width: 640px)').matches) {
+        var o = document.getElementById('glossaryOverlay');
+        o.classList.toggle('open');
       } else {
-        // Desktop: open dropdown
-        const menu = document.getElementById('glossaryMenu');
-        const btn = document.querySelector('.nav-dropdown-btn');
+        var menu = document.getElementById('glossaryMenu');
+        var btn = document.querySelector('.nav-dropdown-btn');
         menu.classList.toggle('open');
         btn.classList.toggle('active');
       }
     }
-    function closeOverlay() {
-      document.getElementById('glossaryOverlay').classList.remove('open');
-    }
-    // Close desktop dropdown when clicking outside
     document.addEventListener('click', function(e) {
-      const dropdown = document.getElementById('glossaryDropdown');
+      var dropdown = document.getElementById('glossaryDropdown');
       if (dropdown && !dropdown.contains(e.target)) {
         document.getElementById('glossaryMenu').classList.remove('open');
-        document.querySelector('.nav-dropdown-btn') && document.querySelector('.nav-dropdown-btn').classList.remove('active');
+        var btn = document.querySelector('.nav-dropdown-btn');
+        if (btn) btn.classList.remove('active');
       }
     });
   </script>
