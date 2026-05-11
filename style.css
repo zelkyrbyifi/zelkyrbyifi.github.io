@@ -474,7 +474,7 @@ body {
   /* Dropdown button same treatment */
   .nav-dropdown { width: 100%; text-align: center; }
   .nav-dropdown-btn {
-    font-size: 1rem;
+    font-size: 1rem !important;
     letter-spacing: 0.15em;
     padding: 0.4rem 0;
     width: 100%;
