@@ -22,15 +22,9 @@
   <div class="site-wrap">
 
     <!-- Star seal -->
-      <!-- Star seal -->
     <div class="star-wrap">
       <img src="images/star.png" alt="seal" width="260"/>
     </div>
-   <!-- <div class="star-wrap">
-      <canvas id="star-canvas" width="340" height="340"></canvas>
-    </div>
-    -->
-
     <header class="site-header">
       <div class="title-rule title-rule--top"></div>
       <h1 class="site-title">Zelkyr</h1>
@@ -39,9 +33,19 @@
     </header>
 
     <nav class="site-nav">
-      <a href="#synopsis">Synopsis</a>
-      <span class="nav-sep">✦</span>
-      <a href="#Read">Read</a>
+      <a href="#synopsis" class="nav-link">Synopsis</a>
+      <span class="nav-sep" aria-hidden="true">✦</span>
+      <a href="#Read" class="nav-link">Read</a>
+      <span class="nav-sep" aria-hidden="true">✦</span>
+      <div class="nav-dropdown" id="glossaryDropdown">
+        <button class="nav-dropdown-btn" onclick="toggleDropdown()">Glossary</button>
+        <ul class="nav-dropdown-menu" id="glossaryMenu">
+          <li><a href="gemstones.html">✦ &nbsp;Gemstones</a></li>
+          <!-- Add new glossary pages here:
+          <li><a href="newpage.html">✦ &nbsp;Page Name</a></li>
+          -->
+        </ul>
+      </div>
     </nav>
 
     <div class="ornament-bar">
@@ -55,16 +59,13 @@
         <span class="section-diamond"></span>
       </div>
       <p>
-       Raised in a small hunter's village, 
-       Luk'yan has spent his whole life preparing –
-       body, mind, and soul — for initiation into the Order of Zorya. 
-       Following its teachings, he is certain of what is right, what is wrong, 
-       and what his place in the world ought to be: 
-       to stand between folk and darkness, guided by the holy light.
-       Then a Seer of the Order visits the village,
-       and he is everything Luk'yan had ever dreamed of. 
-       Could such a blessed coincidence be real? 
-       Luk'yan is about to find out.
+     Born in a small village under the mountains, Luk'yan has given body, mind, and soul to one purpose: 
+     to earn his place in the Order of Zorya as a Knight-Paladin. 
+     Its teachings have told him what is right, what is wrong, and where he belongs — 
+     serving the Seers, walking in holy light, standing firm between folk and evil. 
+     Then a day comes when a Seer of the Order arrives into his village, mighty and beautiful, 
+     and Luk'yan's heart goes from him all at once. The man is everything he ever dreamed of! 
+     Isn't he?
       </p>
     </section>
 
@@ -127,10 +128,25 @@
   <!-- Bottom border strip -->
   <canvas id="border-bottom" class="border-canvas border-bottom"></canvas>
 
+  <script>
+    function toggleDropdown() {
+      const menu = document.getElementById('glossaryMenu');
+      const btn = document.querySelector('.nav-dropdown-btn');
+      menu.classList.toggle('open');
+      btn.classList.toggle('active');
+    }
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      const dropdown = document.getElementById('glossaryDropdown');
+      if (dropdown && !dropdown.contains(e.target)) {
+        document.getElementById('glossaryMenu').classList.remove('open');
+        document.querySelector('.nav-dropdown-btn').classList.remove('active');
+      }
+    });
+  </script>
   <script src="ornaments.js"></script>
   <script>
     document.getElementById('yr').textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
-
