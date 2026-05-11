@@ -11,7 +11,6 @@
   const GOLD    = '#c8923a';
   const GOLD2   = '#e8b84a';
   const GOLDDIM = '#7a5a22';
-  const DARK    = '#100d09';
   const BG      = '#080705';
 
   /* ── Utility ─────────────────────────────────────────────────────────── */
