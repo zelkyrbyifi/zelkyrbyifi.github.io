@@ -491,6 +491,7 @@ body {
     box-shadow: none;
     border-left: none;
     border-right: none;
+    border-top: none;
   }
 
   /* Synopsis parchment block — smaller padding on mobile */
@@ -586,7 +587,7 @@ body {
 .nav-dropdown-menu a:hover {
   color: var(--gold);
   background: #1a130d;
-  padding-left: 1.6rem;
+  padding-left: 2rem;
 }
 
 /* ── Nav buffer star ── */
