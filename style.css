@@ -81,10 +81,6 @@ body {
   animation: fadeIn 1.4s ease both;
 }
 
-#star-canvas {
-  filter: drop-shadow(0 0 18px #c8923a55) drop-shadow(0 0 40px #c8923a22);
-}
-
 /* ── Header ── */
 .site-header {
   text-align: center;
@@ -262,8 +258,6 @@ body {
 }
 
 /* ── Chapter list ── */
-#chapters { animation: fadeIn 1.4s 0.7s ease both; }
-
 .chapter-list {
   list-style: none;
   border-top: 1px solid var(--border2);
@@ -430,8 +424,168 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Responsive ── */
-@media (max-width: 500px) {
-  .site-wrap { padding: 0 1rem; }
-  .site-title { font-size: 3rem; }
+/* ── Responsive / Mobile ── */
+@media (max-width: 640px) {
+
+  /* Hide side border strips on mobile — too narrow to fit */
+  .border-side { display: none; }
+
+  /* Give content room to breathe without side strips */
+  .site-wrap { padding: 0 1.2rem; }
+
+  /* Shrink star image */
+  .star-wrap { padding: 2.5rem 0 1rem; }
+  .star-wrap img { width: 160px !important; }
+
+  /* Title scales via clamp already but cap it sensibly */
+  .site-title { font-size: clamp(2.8rem, 14vw, 5rem); }
+
+  /* Subtitle smaller and tighter */
+  .site-subtitle {
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    max-width: 100%;
+  }
+
+  /* Header less bottom padding */
+  .site-header { padding: 0.5rem 0 1.5rem; }
+
+  /* ── Nav: stack vertically ── */
+  .site-nav {
+    flex-direction: column;
+    gap: 0.2rem;
+    font-size: 1rem;
+    letter-spacing: 0.15em;
+    padding: 0.8rem 0 1.2rem;
+  }
+
+  /* Hide the separators between nav items on mobile */
+  .nav-sep { display: none; }
+
+  /* Each nav link gets its own row with a subtle underline */
+  .nav-link {
+    display: block;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--border);
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Dropdown button same treatment */
+  .nav-dropdown { width: 100%; text-align: center; }
+  .nav-dropdown-btn {
+    font-size: 1rem;
+    letter-spacing: 0.15em;
+    padding: 0.4rem 0;
+    width: 100%;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Dropdown menu full width on mobile */
+  .nav-dropdown-menu {
+    position: static;
+    transform: none;
+    left: auto;
+    min-width: 100%;
+    width: 100%;
+    margin-top: 0;
+    box-shadow: none;
+    border-left: none;
+    border-right: none;
+  }
+
+  /* Synopsis parchment block — smaller padding on mobile */
+  .synopsis {
+    padding: 1.2rem 1.2rem;
+    max-width: 100%;
+  }
+
+  .synopsis p {
+    font-size: 1.1rem;
+    max-width: 100%;
+  }
+
+  /* Book title wraps gracefully */
+  .book-head { flex-wrap: wrap; gap: 0.4rem; }
+
+  /* Chapter entries — slightly tighter */
+  .chapter-entry { gap: 0.8rem; padding: 1rem 0.4rem; }
+  .chapter-coming { gap: 0.8rem; padding: 1rem 0.4rem; }
+
+  /* Footer */
+  .site-footer { padding: 1.5rem 0 2rem; }
+
+  /* Chapter pages */
+  .chapter-back { padding: 1.2rem 0 0; }
+  .chapter-body p:first-child::first-letter { font-size: 3rem; }
+  .parchment-text { padding: 1.5rem 1.2rem; font-size: 1.1rem; }
+}
+
+/* ── Nav dropdown ── */
+.nav-dropdown {
+  position: relative;
+}
+
+.nav-dropdown-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text);
+  padding: 0;
+  transition: color 0.25s;
+}
+
+.nav-dropdown-btn:hover,
+.nav-dropdown-btn.active { color: var(--gold); }
+
+.nav-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 0.8rem);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 200px;
+  background: #12100c;
+  border: 1px solid var(--border2);
+  list-style: none;
+  z-index: 200;
+  box-shadow: 0 8px 32px #00000088;
+}
+
+.nav-dropdown-menu::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+}
+
+.nav-dropdown-menu.open { display: block; }
+
+.nav-dropdown-menu li { border-bottom: 1px solid var(--border); }
+.nav-dropdown-menu li:last-child { border-bottom: none; }
+
+.nav-dropdown-menu a {
+  display: block;
+  padding: 0.8rem 1.2rem;
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s, background 0.2s, padding-left 0.2s;
+}
+
+.nav-dropdown-menu a:hover {
+  color: var(--gold);
+  background: #1a130d;
+  padding-left: 1.6rem;
 }
