@@ -471,28 +471,23 @@ body {
     text-decoration: none;
   }
 
-  /* Dropdown button same treatment */
-  .nav-dropdown { width: 100%; text-align: center; }
-  .nav-dropdown-btn {
-    font-size: 1rem !important;
-    letter-spacing: 0.15em;
+  /* On mobile: hide dropdown mechanism, show direct link instead */
+  .nav-dropdown { display: none; }
+  .nav-mobile-glossary {
+    display: block !important;
     padding: 0.4rem 0;
     width: 100%;
+    text-align: center;
+    text-decoration: none;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text);
+    transition: color 0.25s;
   }
-
-  /* Dropdown menu full width on mobile */
-  .nav-dropdown-menu {
-    position: static;
-    transform: none;
-    left: auto;
-    min-width: 100%;
-    width: 100%;
-    margin-top: 0;
-    box-shadow: none;
-    border-left: none;
-    border-right: none;
-    border-top: none;
-  }
+  .nav-mobile-glossary:hover { color: var(--gold); }
 
   /* Synopsis parchment block — smaller padding on mobile */
   .synopsis {
@@ -587,7 +582,7 @@ body {
 .nav-dropdown-menu a:hover {
   color: var(--gold);
   background: #1a130d;
-  padding-left: 2rem;
+  padding-left: 1.6rem;
 }
 
 /* ── Nav buffer star ── */
