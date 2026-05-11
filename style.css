@@ -462,13 +462,13 @@ body {
   /* Hide the separators between nav items on mobile */
   .nav-sep { display: none; }
 
-  /* Each nav link gets its own row with a subtle underline */
+  /* Each nav link gets its own row */
   .nav-link {
     display: block;
     padding: 0.4rem 0;
-    border-bottom: 1px solid var(--border);
     width: 100%;
     text-align: center;
+    text-decoration: none;
   }
 
   /* Dropdown button same treatment */
@@ -478,7 +478,6 @@ body {
     letter-spacing: 0.15em;
     padding: 0.4rem 0;
     width: 100%;
-    border-bottom: 1px solid var(--border);
   }
 
   /* Dropdown menu full width on mobile */
