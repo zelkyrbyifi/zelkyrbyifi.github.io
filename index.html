@@ -46,8 +46,19 @@
           -->
         </ul>
       </div>
-      <a href="gemstones.html" class="nav-mobile-glossary" style="display:none;">Glossary</a>
     </nav>
+
+    <!-- Mobile glossary overlay -->
+    <div class="glossary-overlay" id="glossaryOverlay">
+      <button class="glossary-overlay-close" onclick="closeOverlay()">✕</button>
+      <div class="glossary-overlay-label">Glossary</div>
+      <ul class="glossary-overlay-list">
+        <li><a href="gemstones.html">✦ &nbsp;Gemstones</a></li>
+        <!-- Add new glossary pages here:
+        <li><a href="newpage.html">✦ &nbsp;Page Name</a></li>
+        -->
+      </ul>
+    </div>
 
     <!-- Decorative star buffer — gives dropdown room to breathe -->
     <div class="star-buffer">
@@ -136,17 +147,26 @@
 
   <script>
     function toggleDropdown() {
-      const menu = document.getElementById('glossaryMenu');
-      const btn = document.querySelector('.nav-dropdown-btn');
-      menu.classList.toggle('open');
-      btn.classList.toggle('active');
+      if (window.innerWidth <= 640) {
+        // Mobile: open full overlay
+        document.getElementById('glossaryOverlay').classList.toggle('open');
+      } else {
+        // Desktop: open dropdown
+        const menu = document.getElementById('glossaryMenu');
+        const btn = document.querySelector('.nav-dropdown-btn');
+        menu.classList.toggle('open');
+        btn.classList.toggle('active');
+      }
     }
-    // Close dropdown when clicking outside
+    function closeOverlay() {
+      document.getElementById('glossaryOverlay').classList.remove('open');
+    }
+    // Close desktop dropdown when clicking outside
     document.addEventListener('click', function(e) {
       const dropdown = document.getElementById('glossaryDropdown');
       if (dropdown && !dropdown.contains(e.target)) {
         document.getElementById('glossaryMenu').classList.remove('open');
-        document.querySelector('.nav-dropdown-btn').classList.remove('active');
+        document.querySelector('.nav-dropdown-btn') && document.querySelector('.nav-dropdown-btn').classList.remove('active');
       }
     });
   </script>
