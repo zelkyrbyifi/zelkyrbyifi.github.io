@@ -457,6 +457,8 @@
 
   /* ── Init ─────────────────────────────────────────────────────────────── */
 
+  function isMobile() { return window.innerWidth <= 640; }
+
   function init() {
     drawMainStar();
 
@@ -467,12 +469,16 @@
 
     const bt = document.getElementById('border-top');
     const bb = document.getElementById('border-bottom');
-    const bl = document.getElementById('border-left');
-    const br = document.getElementById('border-right');
     if (bt) drawBorderStrip(bt);
     if (bb) drawBorderStrip(bb);
-    if (bl) drawSideStrip(bl);
-    if (br) drawSideStrip(br);
+
+    // Skip side strips on mobile — CSS hides them, no need to draw
+    if (!isMobile()) {
+      const bl = document.getElementById('border-left');
+      const br = document.getElementById('border-right');
+      if (bl) drawSideStrip(bl);
+      if (br) drawSideStrip(br);
+    }
 
     drawFooterStar();
   }
@@ -489,12 +495,14 @@
     resizeTimer = setTimeout(function () {
       const bt = document.getElementById('border-top');
       const bb = document.getElementById('border-bottom');
-      const bl = document.getElementById('border-left');
-      const br = document.getElementById('border-right');
       if (bt) drawBorderStrip(bt);
       if (bb) drawBorderStrip(bb);
-      if (bl) drawSideStrip(bl);
-      if (br) drawSideStrip(br);
+      if (!isMobile()) {
+        const bl = document.getElementById('border-left');
+        const br = document.getElementById('border-right');
+        if (bl) drawSideStrip(bl);
+        if (br) drawSideStrip(br);
+      }
     }, 120);
   });
 
