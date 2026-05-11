@@ -268,7 +268,7 @@
           <canvas id="cAltarStar" width="80" height="80"></canvas>
           <div class="altar-placeholder-text">
             BG illustration · 800 × 900 px · PNG transparent<br><br>
-            Select a school below to see its gemstone
+            Select a school below to see its gemstones
           </div>
         </div>
         <div class="gem-placeholder" id="gemPlaceholder">
@@ -281,57 +281,45 @@
       <div class="school-pill-wrap">
         <div class="school-pill-row">
 
+          <div class="group-sep"></div>
+
           <div class="school-group-pills">
-            <button class="school-btn" data-school="Vsemantiya">Vsemantiya</button>
+            <button class="school-btn" data-school="Pravomancy">Pravomancy</button>
+            <button class="school-btn" data-school="Tvorimancy">Tvorimancy</button>
+            <button class="school-btn" data-school="Ruynomancy">Ruynomancy</button>
           </div>
 
           <div class="group-sep"></div>
 
           <div class="school-group-pills">
-            <button class="school-btn" data-school="Pravomantiya">Pravomantiya</button>
-            <button class="school-btn" data-school="Tvorimantiya">Tvorimantiya</button>
-            <button class="school-btn" data-school="Ruynomantiya">Ruynomantiya</button>
+            <button class="school-btn" data-school="Efiromancy">Efiromancy</button>
+            <button class="school-btn" data-school="Svitlomancy">Svitlomancy</button>
+            <button class="school-btn" data-school="Mrokomancy">Mrokomancy</button>
+            <button class="school-btn" data-school="Chasomancy">Chasomancy</button>
+            <button class="school-btn" data-school="Vymiromancy">Vymiromancy</button>
+            <button class="school-btn" data-school="Znakомancy">Znakomancy</button>
           </div>
 
           <div class="group-sep"></div>
 
           <div class="school-group-pills">
-            <button class="school-btn" data-school="Efiromantiya">Efiromantiya</button>
-            <button class="school-btn" data-school="Vitromantiya">Vitromantiya</button>
-            <button class="school-btn" data-school="Svitlomantiya">Svitlomantiya</button>
-            <button class="school-btn" data-school="Mrokomantiya">Mrokomantiya</button>
-            <button class="school-btn" data-school="Chasmantiya">Chasmantiya</button>
-            <button class="school-btn" data-school="Vymiromantiya">Vymiromantiya</button>
-            <button class="school-btn" data-school="Znakомantiya">Znakомantiya</button>
+            <button class="school-btn" data-school="Vodomancy">Vodomancy</button>
+            <button class="school-btn" data-school="Mrozomancy">Mrozomancy</button>
+            <button class="school-btn" data-school="Vohnomancy">Vohnomancy</button>
+            <button class="school-btn" data-school="Zemlymancy">Zemlymancy</button>
           </div>
 
           <div class="group-sep"></div>
 
           <div class="school-group-pills">
-            <button class="school-btn" data-school="Vodomantiya">Vodomantiya</button>
-            <button class="school-btn" data-school="Mrozomantiya">Mrozomantiya</button>
-            <button class="school-btn" data-school="Vohnomantiya">Vohnomantiya</button>
-            <button class="school-btn" data-school="Zemlymantiya">Zemlymantiya</button>
-            <button class="school-btn" data-school="Kaminomantiya">Kaminomantiya</button>
-            <button class="school-btn" data-school="Hruntomantiya">Hruntomantiya</button>
-            <button class="school-btn" data-school="Metalomantiya">Metalomantiya</button>
+            <button class="school-btn" data-school="Zlenomancy">Zlenomancy</button>
+            <button class="school-btn" data-school="Zviromancy">Zviromancy</button>
+            <button class="school-btn" data-school="Zdrovomancy">Zdrovomancy</button>
+            <button class="school-btn" data-school="Zminomancy">Zminomancy</button>
+            <button class="school-btn" data-school="Svidomancy">Svidomancy</button>
           </div>
 
           <div class="group-sep"></div>
-
-          <div class="school-group-pills">
-            <button class="school-btn" data-school="Zlenomantiya">Zlenomantiya</button>
-            <button class="school-btn" data-school="Zviromantiya">Zviromantiya</button>
-            <button class="school-btn" data-school="Zdrovomantiya">Zdrovomantiya</button>
-            <button class="school-btn" data-school="Zminomantiya">Zminomantiya</button>
-            <button class="school-btn" data-school="Svidomantiya">Svidomantiya</button>
-          </div>
-
-          <div class="group-sep"></div>
-
-          <div class="school-group-pills">
-            <button class="school-btn" data-school="Bronyomantiya">Bronyomantiya</button>
-          </div>
 
         </div>
       </div>
@@ -363,63 +351,57 @@
 
     // ── Canon gemstone data (from gemstone_specialty_reference.html) ──
     const SCHOOLS = {
-      'Zlenomantiya':  { sub:'Plant', color:'#3B6D11', tiers:[
+      'Zlenomancy':  { sub:'Plant', color:'#3B6D11', tiers:[
         {t:'Tier I',   gem:'Moss Agate',        desc:'Cultivator\'s stone; encourages growth, fertility, and calm harmony with nature.'},
         {t:'Tier II',  gem:'Peridot',            desc:'Channels sunlight and renewal; revives exhausted flora and restores vigor.'},
         {t:'Tier III', gem:'Green Tourmaline',   desc:'Channels natural vitality; breathes with the forest and deepens plant resonance.'},
         {t:'Tier IV',  gem:'Emerald',            desc:'Symbol of rebirth and eternal spring; strengthens bond with plant spirits.'},
         {t:'Tier V',   gem:'Demantoid',          desc:'Rarest of the green gems; radiates an inner fire that mirrors the life force itself.'},
       ]},
-      'Zviromantiya':  { sub:'Animal', color:'#854F0B', tiers:[
+      'Zviromancy':  { sub:'Animal', color:'#854F0B', tiers:[
         {t:'Tier I',   gem:'Amber',              desc:'Fossilized sunlight preserving ancient life; heightens empathy between witch and beast.'},
         {t:'Tier II',  gem:'Tiger\'s Eye',       desc:'Enhances reflexes, courage, and instinct; focuses mind and body of the tamer.'},
         {t:'Tier III', gem:'Moonstone',          desc:'Fosters emotional intuition; guides animal communication through shared feeling.'},
         {t:'Tier IV',  gem:'Cymophane',          desc:'Sharing a mind with the beast.'},
       ]},
-      'Vodomantiya':   { sub:'Water', color:'#185FA5', tiers:[
+      'Vodomancy':   { sub:'Water', color:'#185FA5', tiers:[
         {t:'Tier I',   gem:'Pearl',              desc:'Lunar conduit of purity; perfects harmony between body, spirit, and wave.'},
         {t:'Tier II',  gem:'Aquamarine',         desc:'Brings calm, balance, and safe passage through emotion and tide.'},
         {t:'Tier III', gem:'Lapis Lazuli',       desc:'Enhances insight and spiritual depth; opens the mind like deep water.'},
         {t:'Tier IV',  gem:'Blue Sapphire',      desc:'Embodies mental discipline and cold focus; the scholar\'s jewel.'},
       ]},
-      'Vohnomantiya':  { sub:'Fire', color:'#993C1D', tiers:[
+      'Vohnomancy':  { sub:'Fire', color:'#993C1D', tiers:[
         {t:'Tier I',   gem:'Garnet',             desc:'Vital spark of passion and endurance; the ember of every pyromancer.'},
         {t:'Tier II',  gem:'Sunstone',           desc:'Brings brightness and joy; fuels radiant spells with warmth.'},
         {t:'Tier III', gem:'Ruby',               desc:'Core of strength and devotion; amplifies the wielder\'s life force.'},
         {t:'Tier IV',  gem:'Red Beryl',          desc:'Unstable but immensely powerful flame.'},
       ]},
-      'Zemlymantiya':  { sub:'Earth', color:'#5F5E5A', tiers:[
+      'Zemlymancy':  { sub:'Earth', color:'#5F5E5A', tiers:[
         {t:'Tier I',   gem:'Jasper',             desc:'Nurturing and grounding; cultivates endurance and stability.'},
         {t:'Tier II',  gem:'Onyx',               desc:'Strengthens determination and shields from discord.'},
         {t:'Tier III', gem:'Smoky Quartz',       desc:'Absorbs tremor energy and balances shifting ground.'},
         {t:'Tier IV',  gem:'Serandite',          desc:'Exceptionally rare mineral of deep geological origin; channels the raw, ancient power of the earth\'s core.'},
       ]},
-      'Metalomantiya': { sub:'Metal', color:'#444441', tiers:[
-        {t:'Tier I',   gem:'Pyrite',             desc:'Sparks creativity and ambition; symbol of strength and metal will.'},
-        {t:'Tier II',  gem:'Magnetite',          desc:'Grounds magnetic energy; aligns poles and governs movement of ferrous matter.'},
-        {t:'Tier III', gem:'Platinum',           desc:'Noble metal of endurance and purity; resonates with the highest forms of metalcraft.'},
-        {t:'Tier IV',  gem:'Rhodium',            desc:'Rarest of the platinum group metals; channels absolute dominion over metallic matter.'},
-      ]},
-      'Svidomantiya':  { sub:'Mind', color:'#72243E', tiers:[
+      'Svidomancy':  { sub:'Mind', color:'#72243E', tiers:[
         {t:'Tier I',   gem:'Fluorite',           desc:'Clarifies thought and memory; aids study and focus.'},
         {t:'Tier II',  gem:'Amethyst',           desc:'Calms inner turmoil and protects against psychic fatigue.'},
         {t:'Tier III', gem:'Labradorite',        desc:'Opens intuition; guards the mind during projection.'},
         {t:'Tier IV',  gem:'Celestite',          desc:'Connects thought to higher consciousness; gem of mental ascension.'},
         {t:'Tier V',   gem:'Kornerupine',        desc:'Control over a person.'},
       ]},
-      'Efiromantiya':  { sub:'Aether', color:'#534AB7', tiers:[
+      'Efiromancy':  { sub:'Aether', color:'#534AB7', tiers:[
         {t:'Tier I',   gem:'Selenite',           desc:'Purifies and aligns energies; gateway to higher planes.'},
         {t:'Tier II',  gem:'Ametrine',           desc:'Balances opposing forces; stabilizes multi-aspect magic.'},
         {t:'Tier III', gem:'Diamond',            desc:'Purest amplifier of will; anchors Ether itself into form.'},
         {t:'Tier IV',  gem:'Benitoite',          desc:'For spell-morphing; truth-revealing, reflection of clarity.'},
       ]},
-      'Svitlomantiya': { sub:'Light', color:'#633806', tiers:[
+      'Svitlomancy': { sub:'Light', color:'#633806', tiers:[
         {t:'Tier I',   gem:'Citrine',            desc:'Radiates positivity and clarity; draws inner sunlight outward.'},
         {t:'Tier II',  gem:'Heliodor',           desc:'Golden brilliance; empowers confidence and divine vision.'},
         {t:'Tier III', gem:'White Opal',         desc:'Prismatic gem of inspiration; channels holy illumination.'},
         {t:'Tier IV',  gem:'Jeremejevite',       desc:'Clarity, order, transparency.'},
       ]},
-      'Mrokomantiya':  { sub:'Shadow', color:'#2C2C2A', tiers:[
+      'Mrokomancy':  { sub:'Shadow', color:'#2C2C2A', tiers:[
         {t:'Tier I',   gem:'Onyx',               desc:'Strengthens resolve in darkness; fosters mastery of silence and stealth.'},
         {t:'Tier II',  gem:'Labradorite',        desc:'Guides souls between states; clarifies separation of light and dark.'},
         {t:'Tier II',  gem:'Black Spinel',       desc:'Renews drained strength; deepens shadow manipulation.'},
@@ -428,46 +410,46 @@
         {t:'Tier IV',  gem:'Serendibite',        desc:'Absorbs light and aura.'},
         {t:'Tier IV',  gem:'Jet',                desc:'Acts as spiritual anchor to the dead.'},
       ]},
-      'Zdrovomantiya': { sub:'Health / Death', color:'#0F6E56', tiers:[
+      'Zdrovomancy': { sub:'Health / Death', color:'#0F6E56', tiers:[
         {t:'Tier I',   gem:'Green Aventurine',   desc:'Gentle harmonizer; stimulates recovery and renewal.'},
         {t:'Tier II',  gem:'Rose Quartz',        desc:'Restores emotional balance; opens heart to healing flow.'},
         {t:'Tier III', gem:'Malachite',          desc:'Extracts ailments and toxins; catalyst of regeneration.'},
         {t:'Tier IV',  gem:'Chrysoprase',        desc:'Extremely rare healer\'s gem; embodies the unity of body and spirit.'},
         {t:'Tier V',   gem:'Grandidierite',      desc:'Can bring someone back to life if heart was beating just recently.'},
       ]},
-      'Znakомantiya':  { sub:'Rune / Sigil', color:'#3C3489', tiers:[
+      'Znakomancy':  { sub:'Rune / Sigil', color:'#3C3489', tiers:[
         {t:'Tier I',   gem:'Sodalite',           desc:'Encourages structured thought and focus in writing magic.'},
         {t:'Tier II',  gem:'Quartz',             desc:'Retains energy inscriptions; foundation of basic sigilcraft.'},
         {t:'Tier III', gem:'Kyanite',            desc:'Rare inscriber\'s crystal; never requires cleansing, perfect for endless sigil use.'},
       ]},
-      'Ruynomantiya':  { sub:'Destruction', color:'#712B13', tiers:[
+      'Ruynomancy':  { sub:'Destruction', color:'#712B13', tiers:[
         {t:'Tier I',   gem:'Black Tourmaline',   desc:'Absorbs destructive backlash and stabilizes output.'},
         {t:'Tier II',  gem:'Obsidian',           desc:'Sharp volcanic glass used for cutting or shattering wards.'},
         {t:'Tier III', gem:'Meteorite',          desc:'Fallen star-metal; annihilates boundaries with cosmic force.'},
         {t:'Tier IV',  gem:'Musgravite',         desc:'Inner peace in distortion and dimensional tension.'},
       ]},
-      'Tvorimantiya':  { sub:'Creation', color:'#1D9E75', note:'Higher tiers not yet documented.', tiers:[
+      'Tvorimancy':  { sub:'Creation', color:'#1D9E75', note:'Higher tiers not yet documented.', tiers:[
         {t:'Tier I',   gem:'Citrine',            desc:'Inspires manifestation and design; starting point for all making.'},
       ]},
-      'Zminomantiya':  { sub:'Transformation', color:'#993556', tiers:[
+      'Zminomancy':  { sub:'Transformation', color:'#993556', tiers:[
         {t:'Tier I',   gem:'Labradorite',        desc:'Facilitates inner transformation and adaptability.'},
         {t:'Tier II',  gem:'Opal (Milky)',       desc:'Encourages fluidity of identity and form.'},
         {t:'Tier III', gem:'Chrysoberyl (Cat\'s Eye)', desc:'Enhances foresight during bodily change.'},
         {t:'Tier IV',  gem:'Alexandrite',        desc:'Gem of dual existence; perfect emblem of metamorphosis.'},
         {t:'Tier V',   gem:'Tanzanite',          desc:'The shifting hues represent transition, awakening, and the bridge between physical and spiritual planes.'},
       ]},
-      'Chasmantiya':   { sub:'Time', color:'#5F5E5A', note:'Tiers II and III not yet documented.', tiers:[
+      'Chasomancy':   { sub:'Time', color:'#5F5E5A', note:'Tiers II and III not yet documented.', tiers:[
         {t:'Tier I',   gem:'Petrified Wood',     desc:'Fossil of ancient ages; embodies time slowed to stillness.'},
         {t:'Tier II',  gem:'Ammolite',           desc:'Fossilized ammonite shell, millions of years old; iridescent record of deep time.'},
         {t:'Tier III', gem:'Stichtite',          desc:'Rare mineral of ancient Precambrian formations; holds the slow memory of the earth\'s earliest ages.'},
         {t:'Tier IV',  gem:'Cerussite',          desc:'Extremely fragile — as time itself becomes when touched too directly.'},
       ]},
-      'Pravomantiya':  { sub:'Law', color:'#3C3489', note:'Lower tiers not yet documented. Painite (Untiered) — the one hidden in the Wastelands of the West, ultimate power.', tiers:[
+      'Pravomancy':  { sub:'Law', color:'#3C3489', note:'Lower tiers not yet documented. Painite (Untiered) — the one hidden in the Wastelands of the West, ultimate power.', tiers:[
         {t:'Tier IV',  gem:'Hackmanite',         desc:'Used to establish the rules of a pact.'},
         {t:'Tier IV',  gem:'Taafeite',           desc:'Neutralizes magic — to negate.'},
         {t:'Tier IV',  gem:'Poudretteite',       desc:'Contains the pools of power, suppressing it — to hide.'},
       ], special:{ gem:'Painite', desc:'Untiered — hidden in the Wastelands of the West. Ultimate power.' }},
-      'Mrozomantiya':  { sub:'Ice / Frost', color:'#0C447C', note:'A standalone specialty in Styhiyna. Manipulates thermal kinetic energy — distinct from Vodomantiya despite often affecting water.', tiers:[
+      'Mrozomancy':  { sub:'Ice / Frost', color:'#0C447C', note:'A standalone specialty in Styhiyna. Manipulates thermal kinetic energy — distinct from Vodomantiya despite often affecting water.', tiers:[
         {t:'Tier I',   gem:'Iolite',             desc:'Stone of endurance and vision; keeps frostcraft steady under pressure.'},
         {t:'Tier II',  gem:'Cryolite',           desc:'The ice stone — rare, translucent, and naturally attuned to frost.'},
         {t:'Tier III', gem:'Jeremejevite',       desc:'One of the rarest minerals in the world; pale ice-blue, channels frost at its most refined and absolute.'},
@@ -476,13 +458,13 @@
 
     // Gem colors for placeholder crystal preview
     const GEM_COLORS = {
-      'Pravomantiya':'#f0e8a0','Tvorimantiya':'#a0d8f0',
-      'Ruynomantiya':'#d04040','Efiromantiya':'#c8a0f8',
-      'Svitlomantiya':'#f8f0a0','Mrokomantiya':'#806080','Chasmantiya':'#8080c0',
-      'Vymiromantiya':'#a0b8d8','Znakомantiya':'#d8c880','Vodomantiya':'#4080c0',
-      'Mrozomantiya':'#c0e0f8','Vohnomantiya':'#e85020','Zemlymantiya':'#806040',
-      'Zlenomantiya':'#40a040','Zviromantiya':'#80a060','Zdrovomantiya':'#60c080',
-      'Zminomantiya':'#c060a0','Svidomantiya':'#8060c0',
+      'Pravomancy':'#f0e8a0','Tvorimancy':'#a0d8f0',
+      'Ruynomancy':'#d04040','Efiromancy':'#c8a0f8',
+      'Svitlomancy':'#f8f0a0','Mrokomancy':'#806080','Chasomancy':'#8080c0',
+      'Vymiromancy':'#a0b8d8','Znakomancy':'#d8c880','Vodomancy':'#4080c0',
+      'Mrozomancy':'#c0e0f8','Vohnomancy':'#e85020','Zemlymancy':'#806040',
+      'Zlenomancy':'#40a040','Zviromancy':'#80a060','Zdrovomancy':'#60c080',
+      'Zminomancy':'#c060a0','Svidomancy':'#8060c0',
     };
 
     function drawGem(canvas, color) {
