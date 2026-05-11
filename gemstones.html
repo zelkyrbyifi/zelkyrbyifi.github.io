@@ -8,7 +8,7 @@
   <style>
     .gemstone-page {
       display: grid;
-      grid-template-columns: 200px 1fr;
+      grid-template-columns: 220px 1fr;
       gap: 2rem;
       padding: 2rem 0 4rem;
       align-items: start;
@@ -16,6 +16,7 @@
 
     /* ── Sidebar ── */
     .school-sidebar { position: sticky; top: 2rem; }
+
 
     .sidebar-label {
       font-family: var(--font-heading);
@@ -65,12 +66,12 @@
     .school-btn.active::before { content: '✦ '; font-size: 0.45rem; vertical-align: middle; color: var(--gold); }
 
     /* ── Main area ── */
-    .altar-area { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+    .altar-area { display: flex; flex-direction: column; align-items: stretch; gap: 1.5rem; }
 
     .altar-frame {
       position: relative;
       width: 100%;
-      max-width: 480px;
+      max-width: 100%;
       aspect-ratio: 8 / 9;
       border: 1px solid var(--border2);
       background: #0e0b07;
@@ -149,7 +150,6 @@
     /* ── Info panel below altar ── */
     .school-info {
       width: 100%;
-      max-width: 480px;
       opacity: 0;
       transform: translateY(6px);
       transition: opacity 0.4s ease, transform 0.4s ease;
@@ -218,10 +218,6 @@
       line-height: 1.6;
     }
 
-    @media (max-width: 640px) {
-      .gemstone-page { grid-template-columns: 1fr; }
-      .school-sidebar { position: static; }
-    }
   </style>
 </head>
 <body>
@@ -296,6 +292,7 @@
             <li><button class="school-btn" data-school="Svidomantiya">Svidomancy</button></li>
           </ul>
         </div>
+      </aside>
 
       <div class="altar-area">
         <div class="altar-frame" id="altarFrame">
@@ -600,3 +597,4 @@
 
 </body>
 </html>
+
