@@ -17,7 +17,7 @@
   <canvas id="border-right" class="border-canvas border-side border-right"></canvas>
 
   <!-- Top border strip -->
-  <canvas id="border-top" class="border-canvas border-top"></canvas>
+  <canvas id="border-top" class="border-canvas border-top" style="pointer-events:none;"></canvas>
 
   <div class="site-wrap">
 
@@ -41,6 +41,7 @@
         <button class="nav-dropdown-btn" onclick="toggleDropdown()">Glossary</button>
         <ul class="nav-dropdown-menu" id="glossaryMenu">
           <li><a href="gemstones.html">✦ &nbsp;Gemstones</a></li>
+          <li><a href="characters.html">✦ &nbsp;Characters</a></li>
           <!-- Add new glossary pages here:
           <li><a href="newpage.html">✦ &nbsp;Page Name</a></li>
           -->
@@ -50,11 +51,11 @@
 
     <!-- Decorative star buffer — gives dropdown room to breathe -->
     <div class="star-buffer">
-      <canvas id="star-canvas" width="140" height="140"></canvas>
+      <canvas id="star-canvas" width="340" height="340" style="pointer-events:none;width:220px;height:220px;"></canvas>
     </div>
 
     <div class="ornament-bar">
-      <canvas id="orn-bar" width="640" height="28"></canvas>
+      <canvas id="orn-bar" width="640" height="28" style="pointer-events:none;"></canvas>
     </div>
 
     <section class="synopsis" id="synopsis">
@@ -124,7 +125,7 @@
     </div>
 
     <footer class="site-footer">
-      <canvas id="footer-star" width="40" height="40"></canvas>
+      <canvas id="footer-star" width="40" height="40" style="pointer-events:none;"></canvas>
       <p>&copy; <span id="yr"></span> &nbsp;·&nbsp; All rights reserved</p>
     </footer>
 
@@ -136,12 +137,13 @@
     <div class="glossary-overlay-label">Glossary</div>
     <ul class="glossary-overlay-list">
       <li><a href="gemstones.html">Gemstones</a></li>
+      <li><a href="characters.html">Characters</a></li>
       <!-- Add new pages here: <li><a href="newpage.html">Page Name</a></li> -->
     </ul>
   </div>
 
   <!-- Bottom border strip -->
-  <canvas id="border-bottom" class="border-canvas border-bottom"></canvas>
+  <canvas id="border-bottom" class="border-canvas border-bottom" style="pointer-events:none;"></canvas>
 
   <script>
     function toggleDropdown() {
