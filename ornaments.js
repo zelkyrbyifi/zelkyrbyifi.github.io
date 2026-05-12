@@ -21,6 +21,7 @@
     canvas.height = h * r;
     canvas.style.width  = w + 'px';
     canvas.style.height = h + 'px';
+    canvas.style.pointerEvents = 'none';
     const ctx = canvas.getContext('2d');
     ctx.scale(r, r);
     return ctx;
