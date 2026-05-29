@@ -166,8 +166,56 @@
       .portrait-frame { max-width: 280px; }
     }
   </style>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-04HKWR5P71"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-04HKWR5P71');
+  </script>
+
+  <style id="lang-style">
+    #lang-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      position: fixed;
+      top: 1rem;
+      right: 1.5rem;
+      z-index: 400;
+    }
+    .lang-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-heading);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.4rem;
+      border-radius: 2px;
+      transition: color 0.2s, background 0.2s;
+      color: var(--muted);
+    }
+    .lang-btn.active {
+      color: var(--gold);
+      background: #1a130d;
+      border: 1px solid var(--border2);
+    }
+    .lang-btn:hover:not(.active) { color: var(--text); }
+    .lang-sep { color: var(--border2); font-size: 0.5rem; }
+  </style>
 </head>
 <body>
+
+
+  <!-- Language toggle -->
+  <div id="lang-toggle">
+    <button class="lang-btn" id="btn-en" onclick="switchLang('en')">EN</button>
+    <span class="lang-sep">|</span>
+    <button class="lang-btn" id="btn-ua" onclick="switchLang('ua')">UA</button>
+  </div>
 
   <div class="grain"></div>
   <canvas id="border-left" class="border-canvas border-side border-left"></canvas>
@@ -245,7 +293,7 @@
       {
         key:  'lukyan',
         name: 'Luk\'yan',
-        role: 'An acolyte of the Order of Zorya',
+        role: 'An acolyte of Zorya',
       },
       {
         key:  'andrian',
@@ -356,5 +404,66 @@
     drawPlaceholderStar();
   </script>
 
+
+  <script>
+    (function() {
+      var LANG_MAP = {
+        'index.html':         'index-ua.html',
+        'gemstones.html':     'gemstones-ua.html',
+        'characters.html':    'characters-ua.html',
+        'team.html':          'team-ua.html',
+        'index-ua.html':      'index.html',
+        'gemstones-ua.html':  'gemstones.html',
+        'characters-ua.html': 'characters.html',
+        'team-ua.html':       'team.html',
+      };
+
+      function getCurrentPage() {
+        var path = window.location.pathname;
+        return path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+      }
+
+      function isUAPage() {
+        return getCurrentPage().endsWith('-ua.html') ||
+               getCurrentPage().includes('-ua/');
+      }
+
+      window.switchLang = function(lang) {
+        localStorage.setItem('zelkyr-lang', lang);
+        var page = getCurrentPage();
+        var dest;
+        if (page.includes('chapter-')) {
+          dest = lang === 'ua'
+            ? page.replace(/(-ua)?\.html$/, '-ua.html')
+            : page.replace('-ua.html', '.html');
+        } else {
+          dest = lang === 'ua'
+            ? (LANG_MAP[page] && LANG_MAP[page].endsWith('-ua.html') ? LANG_MAP[page] : page.replace('.html', '-ua.html'))
+            : (LANG_MAP[page] && !LANG_MAP[page].endsWith('-ua.html') ? LANG_MAP[page] : page.replace('-ua.html', '.html'));
+        }
+        if (dest && dest !== page) window.location.href = dest;
+      };
+
+      // Set active button
+      var ua = isUAPage();
+      var btnEn = document.getElementById('btn-en');
+      var btnUa = document.getElementById('btn-ua');
+      if (btnEn) btnEn.classList.toggle('active', !ua);
+      if (btnUa) btnUa.classList.toggle('active', ua);
+
+      // Auto-redirect based on saved language — use flag to prevent loops
+      var saved = localStorage.getItem('zelkyr-lang');
+      if (saved && !sessionStorage.getItem('lang-redirected')) {
+        var ua = isUAPage();
+        if (saved === 'ua' && !ua) {
+          sessionStorage.setItem('lang-redirected', '1');
+          switchLang('ua');
+        } else if (saved === 'en' && ua) {
+          sessionStorage.setItem('lang-redirected', '1');
+          switchLang('en');
+        }
+      }
+    })();
+  </script>
 </body>
 </html>
