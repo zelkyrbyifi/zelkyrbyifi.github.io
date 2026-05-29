@@ -396,6 +396,11 @@ canvas { pointer-events: none; }
   hyphens: auto;
 }
 
+/* Indent paragraphs after the first, keep spacing too */
+.chapter-body p + p {
+  text-indent: 2em;
+}
+
 .chapter-body p:first-child::first-letter {
   font-family: var(--font-display);
   font-size: 4.2rem;
@@ -708,3 +713,14 @@ canvas { pointer-events: none; }
     background: #1a130d;
   }
 }
+
+
+/* ── Scene break spacing ── */
+.scene-break {
+  text-align: center;
+  color: var(--gold-dim);
+  font-size: 0.7rem;
+  letter-spacing: 0.4em;
+  margin: 2.5rem 0;
+}
+
