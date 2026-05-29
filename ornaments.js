@@ -1,12 +1,3 @@
-/**
- * ornaments.js
- * Draws all canvas decorations for Zelkyr:
- *  - Eight-pointed star seal (index page)
- *  - Ornamental bar with kalyna/wheat motifs
- *  - Top/bottom border strips
- *  - Small footer star
- */
-
 (function () {
   const GOLD    = '#c8923a';
   const GOLD2   = '#e8b84a';
