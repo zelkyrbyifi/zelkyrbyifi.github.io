@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+
+<!--
+  "Zelkyr" — www.zelkyr.com
+  Built by Ifigeniya
+  Last updated: 06/01/2025
+  All rights reserved
+-->
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -222,16 +230,12 @@
       <div class="nav-dropdown" id="glossaryDropdown">
         <button class="nav-dropdown-btn" onclick="toggleDropdown()">Glossary</button>
         <ul class="nav-dropdown-menu" id="glossaryMenu">
-          <li><a href="gemstones.html">✦ &nbsp;Gemstones</a></li>
           <li><a href="characters.html">✦ &nbsp;Characters</a></li>
-          <!-- Add new glossary pages here:
-          <li><a href="newpage.html">✦ &nbsp;Page Name</a></li>
-          -->
         </ul>
       </div>
     </nav>
 
-    <!-- Decorative star buffer — gives dropdown room to breathe -->
+    <!-- Decorative star buffer -->
     <div class="star-buffer">
       <canvas id="star-canvas" width="340" height="340" style="pointer-events:none;width:220px;height:220px;"></canvas>
     </div>
@@ -248,12 +252,13 @@
       </div>
       <p>
      Born in a small village under the mountains, Luk'yan has given body, mind, and soul to one purpose: 
-     to earn his place in the Order of Zorya as a Knight-Paladin. 
-     Its teachings have told him what is right, what is wrong, and where he belongs — 
-     serving the Seers, walking in holy light, standing firm between folk and evil. 
-     Then a day comes when a Seer of the Order arrives into his village, mighty and beautiful, 
-     and Luk'yan's heart goes from him all at once. The man is everything he ever dreamed of! 
-     Isn't he?
+     to earn his place in the Order of Zorya as a Knight-Paladin and serve the people of Kyliya. 
+     He had been taught young what was right, what was wrong, and where he belonged: 
+     by the Seers, walking in holy light, standing firm between folk and evil. 
+     Still finding himself not worthy yet to be initiated, he meets a Seer of the Order, 
+     who arrives into his village – mighty, beautiful, composed – a pinnacle of the Order's guidance.
+     Luk'yan's heart goes from him all at once. The man was everything he had ever allowed himself to want... 
+     Wasn't he?
       </p>
     </section>
 
@@ -286,22 +291,7 @@
           </li>
         </ul>
       </div>
-
-      <!-- When Book II exists, copy the entire book div above and paste here -->
-
     </section>
-        <!-- Every <li> inside is one row. For every new chapter after that, copy that block, change chapter-01 to chapter-02, change I to II, and change the title
-       When ready, replace the placeholder below with code:
-        <li>
-          <a href="chapters/chapter-01.html" class="chapter-entry">
-            <span class="ch-num">I</span>
-            <span class="ch-divider"></span>
-            <span class="ch-title">Chapter Title</span>
-            <span class="ch-arrow">→</span>
-          </a>
-        </li>
-        -->
-
 
     <div class="mid-rule">
       <span></span>
@@ -316,14 +306,12 @@
 
   </div>
 
-  <!-- Mobile glossary overlay — hidden on desktop via CSS -->
+  <!-- Mobile glossary overlay (hidden on desktop via CSS) -->
   <div class="glossary-overlay" id="glossaryOverlay" aria-hidden="true">
     <button class="glossary-overlay-close" onclick="document.getElementById('glossaryOverlay').classList.remove('open')">✕</button>
     <div class="glossary-overlay-label">Glossary</div>
     <ul class="glossary-overlay-list">
-      <li><a href="gemstones.html">Gemstones</a></li>
       <li><a href="characters.html">Characters</a></li>
-      <!-- Add new pages here: <li><a href="newpage.html">Page Name</a></li> -->
     </ul>
   </div>
 
@@ -495,7 +483,7 @@
     (function() {
       var LANG_MAP = {
         'index.html':         'index-ua.html',
-        'gemstones.html':     'gemstones-ua.html',
+        'gemstones.html':     'gemstones-ua.html', 
         'characters.html':    'characters-ua.html',
         'team.html':          'team-ua.html',
         'index-ua.html':      'index.html',
