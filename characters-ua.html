@@ -14,7 +14,7 @@
       padding: 1.5rem 0 4rem;
     }
 
-    /* ── Portrait frame — tall to match 2095×4104 ratio ── */
+    /* ── Portrait frame — */
     .portrait-frame {
       position: relative;
       width: 100%;
@@ -275,7 +275,7 @@
 
     <footer class="site-footer">
       <canvas id="footer-star" width="40" height="40"></canvas>
-      <p>&copy; <span id="yr"></span> &nbsp;·&nbsp; Усі права захищені</p>
+      <p>&copy; <span id="yr"></span> &nbsp;·&nbsp; © 2026 Іфігенія. Усі права захищені. «Зелкір» є художнім твором. Усі персонажі та події є вигаданими. Містить теми для дорослих. Рекомендовано читачам від 18 років. Жодна частина цього твору не може бути відтворена без письмового дозволу.</p>
     </footer>
 
   </div>
@@ -286,19 +286,16 @@
   <script>
     document.getElementById('yr').textContent = new Date().getFullYear();
 
-    // ── Character data ──
-    // To add a character: add an entry to CHARACTERS
-    // Save their portrait as images/portrait-[key].png
     const CHARACTERS = [
       {
         key:  'lukyan',
         name: 'Лук\'ян',
-        role: 'Acolyte of Зорі',
+        role: '???',
       },
       {
         key:  'andrian',
-        name: 'Андріан',
-        role: 'The Seer of Зорі',
+        name: '???',
+        role: '???',
       },
       {
         key:  'nestor',
@@ -451,7 +448,7 @@
       if (btnEn) btnEn.classList.toggle('active', !ua);
       if (btnUa) btnUa.classList.toggle('active', ua);
 
-      // Auto-redirect based on saved language — use flag to prevent loops
+      // Auto-redirect based on saved language 
       var saved = localStorage.getItem('zelkyr-lang');
       if (saved && !sessionStorage.getItem('lang-redirected')) {
         var ua = isUAPage();
