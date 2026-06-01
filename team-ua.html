@@ -112,6 +112,13 @@
         grid-template-columns: repeat(2, 1fr);
         gap: 1.2rem;
       }
+      .team-card {
+        width: 100%;
+      }
+      .team-portrait {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+      }
     }
   </style>
 
@@ -124,6 +131,13 @@
       top: 1rem;
       right: 1.5rem;
       z-index: 400;
+    }
+    @media (max-width: 640px) {
+      #lang-toggle {
+        position: static;
+        justify-content: flex-end;
+        padding: 0.5rem 0 0;
+      }
     }
     .lang-btn {
       background: none;
@@ -350,7 +364,7 @@
       if (btnEn) btnEn.classList.toggle('active', !ua);
       if (btnUa) btnUa.classList.toggle('active', ua);
 
-      // Auto-redirect based on saved language — use flag to prevent loops
+      // Auto-redirect based on saved language 
       var saved = localStorage.getItem('zelkyr-lang');
       if (saved && !sessionStorage.getItem('lang-redirected')) {
         var ua = isUAPage();
