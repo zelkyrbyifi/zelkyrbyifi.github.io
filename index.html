@@ -133,6 +133,36 @@
       opacity: 0.6;
     }
 
+
+    .splash-lang {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      position: absolute;
+      top: 1.2rem;
+      right: 1.5rem;
+    }
+    .splash-lang-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #6b5a3e;
+      padding: 0.3rem 0.4rem;
+      border-radius: 2px;
+      transition: color 0.2s;
+    }
+    .splash-lang-btn.active {
+      color: #c8923a;
+      border: 1px solid #4a3520;
+      background: #1a130d;
+    }
+    .splash-lang-btn:hover:not(.active) { color: #cfc0a0; }
+    .splash-lang-sep { color: #4a3520; font-size: 0.5rem; }
+
     .splash-subtitle {
       font-family: 'Cinzel', serif;
       font-size: 0.65rem;
@@ -188,6 +218,11 @@
   <!-- Splash screen -->
   <script>if(localStorage.getItem('zelkyr-entered')){document.write('<style>#splash{display:none!important}</style>');}</script>
   <div id="splash" style="display:flex">
+    <div class="splash-lang">
+      <button class="splash-lang-btn active" onclick="localStorage.setItem('zelkyr-lang','en');window.location.href='index.html'">EN</button>
+      <span class="splash-lang-sep">|</span>
+      <button class="splash-lang-btn " onclick="localStorage.setItem('zelkyr-lang','ua');window.location.href='index-ua.html'">UA</button>
+    </div>
     <div class="splash-title">Zelkyr</div>
     <div class="splash-rule"></div>
     <div class="splash-subtitle">A Ukrainian-made LGBTQ+ romantasy novel</div>
