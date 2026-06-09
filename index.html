@@ -371,7 +371,7 @@
 
     <footer class="site-footer">
       <canvas id="footer-star" width="40" height="40" style="pointer-events:none;"></canvas>
-      <p>&copy; <span id="yr"></span> &nbsp;·&nbsp; Ifigeniya. All rights reserved. Zelkyr is a work of fiction. All characters and events are fictitious. Contains mature themes. Recommended for readers 18+. No part of this work may be reproduced without written permission. </p>
+      <p>&copy; 2025<span id="yr-range"></span> &nbsp;·&nbsp;  Ifigeniya. All rights reserved. Zelkyr is a work of fiction. All characters and events are fictitious. Contains mature themes. Recommended for readers 18+. No part of this work may be reproduced without written permission. </p>
     </footer>
 
   </div>
@@ -412,7 +412,7 @@
   </script>
   <script src="ornaments.js"></script>
   <script>
-      document.getElementById('yr').textContent = new Date().getFullYear();
+      var cur = new Date().getFullYear(); if (cur > 2025) { document.getElementById('yr-range').textContent = '\u2013' + cur; }
   </script>
 
   <script>
