@@ -412,7 +412,7 @@
   </script>
   <script src="ornaments.js"></script>
   <script>
-    document.getElementById('yr').textContent = new Date().getFullYear();
+    var _cur = new Date().getFullYear(); if (_cur > 2026) { document.getElementById('yr-range').textContent = '\u2013' + _cur; }
   </script>
 
   <script>
