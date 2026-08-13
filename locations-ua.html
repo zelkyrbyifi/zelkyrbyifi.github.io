@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Локації · Зелкир</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <style>
+    /* ── Page layout ── */
+    .characters-page {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      padding: 1.5rem 0 4rem;
+    }
+
+    /* ── Portrait frame — */
+    .portrait-frame {
+      position: relative;
+      width: fit-content;
+      min-width: 320px;
+      max-width: min(1000px, 100%);
+      min-height: 260px;
+      margin: 0 auto;
+      border: 1px solid var(--border2);
+      background: #0e0b07;
+      overflow: hidden;
+    }
+
+    .portrait-frame::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, #c8923a08 0%, transparent 20%),
+        linear-gradient(to top, #c8923a08 0%, transparent 20%);
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .portrait-frame::after {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border: 1px solid var(--border);
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .portrait-img { transition: opacity 0.5s ease; }
+
+    /* Base image defines the banner height */
+    .portrait-base {
+      position: relative;
+      display: block;
+      width: auto;
+      max-width: 1000px;
+      height: auto;
+      z-index: 1;
+      opacity: 1;
+    }
+    /* Overlays sit on top, matched to the base image box */
+    .portrait-overlay {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      z-index: 2;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .portrait-overlay.visible { opacity: 1; }
+
+    /* Placeholder when no image */
+    .portrait-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      z-index: 1;
+    }
+
+    .portrait-placeholder-text {
+      font-family: var(--font-heading);
+      font-size: 0.55rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--border2);
+      text-align: center;
+      padding: 0 2rem;
+      line-height: 2;
+    }
+
+    /* ── Horizontal pill row ── */
+    .char-pill-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+    }
+
+    .char-pill-wrap::-webkit-scrollbar { display: none; }
+
+    .char-pill-row {
+      display: flex;
+      gap: 0.6rem;
+      padding: 0.4rem 0.2rem;
+      width: max-content;
+    }
+
+    .char-btn {
+      background: #12100c;
+      border: 1px solid var(--border2);
+      cursor: pointer;
+      padding: 0.4rem 1.2rem;
+      border-radius: 999px;
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--muted);
+      white-space: nowrap;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .char-btn:hover {
+      color: var(--text);
+      border-color: var(--gold-dim);
+      background: #1a130d;
+    }
+
+    .char-btn.active {
+      color: var(--gold);
+      border-color: var(--gold);
+      background: #1e1508;
+    }
+
+    /* ── Pill row arrows ── */
+    .char-pill-nav {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+    .char-arrow {
+      flex-shrink: 0;
+      background: #12100c;
+      border: 1px solid var(--border2);
+      color: var(--muted);
+      width: 2.1rem;
+      height: 2.1rem;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-size: 0.8rem;
+      line-height: 1;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+      user-select: none;
+    }
+    .char-arrow:hover {
+      color: var(--gold);
+      border-color: var(--gold-dim);
+      background: #1a130d;
+    }
+    .char-arrow:active { background: #1e1508; }
+
+    /* ── Info panel ── */
+    .char-info {
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      border-top: 1px solid var(--border2);
+      padding-top: 1rem;
+      text-align: center;
+    }
+
+    .char-info.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .char-info-name {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      color: var(--gold2);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.3rem;
+      text-shadow: 0 0 30px #e8b84a22;
+    }
+
+    .char-info-role {
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 640px) {
+      .portrait-frame { width: 100%; min-width: 0; max-width: 100%; }
+      .portrait-base { width: 100%; max-width: 100%; }
+    }
+  </style>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-04HKWR5P71"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-04HKWR5P71');
+  </script>
+
+  <style id="lang-style">
+    #lang-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      position: fixed;
+      top: 1rem;
+      right: 1.5rem;
+      z-index: 400;
+    }
+    .lang-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-heading);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.4rem;
+      border-radius: 2px;
+      transition: color 0.2s, background 0.2s;
+      color: var(--muted);
+    }
+    .lang-btn.active {
+      color: var(--gold);
+      background: #1a130d;
+      border: 1px solid var(--border2);
+    }
+    .lang-btn:hover:not(.active) { color: var(--text); }
+    .lang-sep { color: var(--border2); font-size: 0.5rem; }
+  </style>
+</head>
+<body>
+
+
+  <!-- Language toggle -->
+  <div id="lang-toggle">
+    <button class="lang-btn" id="btn-en" onclick="switchLang('en')">EN</button>
+    <span class="lang-sep">|</span>
+    <button class="lang-btn" id="btn-ua" onclick="switchLang('ua')">UA</button>
+  </div>
+
+  <div class="grain"></div>
+  <canvas id="border-left" class="border-canvas border-side border-left"></canvas>
+  <canvas id="border-right" class="border-canvas border-side border-right"></canvas>
+  <canvas id="border-top" class="border-canvas border-top"></canvas>
+
+  <div class="site-wrap">
+
+    <div class="chapter-back" style="padding: 2rem 0 0;">
+      <a href="index-ua.html">← Зелкир</a>
+    </div>
+
+    <div class="ornament-bar" style="margin-top:1rem;">
+      <canvas id="orn-bar" width="640" height="28"></canvas>
+    </div>
+
+    <header class="chapter-header">
+      <div class="section-head">
+        <span class="section-diamond"></span>
+        <span class="section-label">Зелкир</span>
+        <span class="section-diamond"></span>
+      </div>
+      <h1 class="chapter-title-large">Локації</h1>
+    </header>
+
+    <div class="characters-page">
+
+      <!-- Portrait frame -->
+      <div class="portrait-frame" id="portraitFrame">
+        <img class="portrait-img portrait-base"
+             src="images/location-default.jpg"
+             alt="Локація"
+             onerror="this.style.display='none'" />
+        <div class="portrait-placeholder" id="portraitPlaceholder">
+          <canvas id="cPortraitStar" width="80" height="80"></canvas>
+          <div class="portrait-placeholder-text">
+            Оберіть локацію нижче
+          </div>
+        </div>
+        <div id="portraitOverlayContainer"></div>
+      </div>
+
+      <!-- Character info panel -->
+      <div class="char-info" id="charInfo">
+        <div class="char-info-name" id="charName"></div>
+        <div class="char-info-role" id="charRole"></div>
+      </div>
+
+      <!-- Horizontal pill row with arrows -->
+      <div class="char-pill-nav">
+        <button class="char-arrow" id="charPrev" aria-label="Попередній">&#8249;</button>
+        <div class="char-pill-wrap">
+          <div class="char-pill-row" id="charPillRow">
+            <!-- Pills generated by JS -->
+          </div>
+        </div>
+        <button class="char-arrow" id="charNext" aria-label="Наступний">&#8250;</button>
+      </div>
+
+    </div>
+
+    <footer class="site-footer">
+      <canvas id="footer-star" width="40" height="40"></canvas>
+      <p>&copy; 2025<span id="yr-range"></span> &nbsp;·&nbsp; Іфігенія. Усі права захищені. «Зелкир» є художнім твором. Усі персонажі та події є вигаданими. Містить теми для дорослих. Рекомендовано читачам від 18 років. Жодна частина цього твору не може бути відтворена без письмового дозволу.</p>
+    </footer>
+
+  </div>
+
+  <canvas id="border-bottom" class="border-canvas border-bottom"></canvas>
+
+  <script src="ornaments.js"></script>
+  <script>
+    var cur = new Date().getFullYear(); if (cur > 2025) { document.getElementById('yr-range').textContent = '\u2013' + cur; }
+
+    const CHARACTERS = [
+      {
+        key:  'nidze',
+        name: 'Нідзе',
+        role: '???',
+      },
+    ];
+
+    // ── Build pill buttons ──
+    const pillRow = document.getElementById('charPillRow');
+    CHARACTERS.forEach(char => {
+      const btn = document.createElement('button');
+      btn.className = 'char-btn';
+      btn.dataset.key = char.key;
+      btn.textContent = char.name;
+      btn.addEventListener('click', () => selectChar(char.key));
+      pillRow.appendChild(btn);
+    });
+
+    // ── Build portrait overlay images ──
+    const overlayContainer = document.getElementById('portraitOverlayContainer');
+    CHARACTERS.forEach(char => {
+      const img = document.createElement('img');
+      img.className = 'portrait-img portrait-overlay';
+      img.id = 'portrait-' + char.key;
+      img.src = 'images/location-' + char.key + '.jpg';
+      img.alt = char.name;
+      img.onerror = function() { this.style.display = 'none'; };
+      overlayContainer.appendChild(img);
+    });
+
+    // ── Draw placeholder star ──
+    function drawPlaceholderStar() {
+      const canvas = document.getElementById('cPortraitStar');
+      if (!canvas) return;
+      const DPR = window.devicePixelRatio || 1;
+      const S = 80;
+      canvas.width = S*DPR; canvas.height = S*DPR;
+      canvas.style.width = S+'px'; canvas.style.height = S+'px';
+      const ctx = canvas.getContext('2d');
+      ctx.scale(DPR, DPR);
+      const cx = S/2, cy = S/2;
+      ctx.beginPath();
+      for (let i = 0; i < 16; i++) {
+        const a = (i * Math.PI) / 8 - Math.PI/2;
+        const r = i%2===0 ? 32 : 14;
+        const x = cx + Math.cos(a)*r, y = cy + Math.sin(a)*r;
+        i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+      }
+      ctx.closePath();
+      ctx.strokeStyle = '#4a3520';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // ── Select character ──
+    let activeChar = null;
+
+    function selectChar(key) {
+      // Deactivate all
+      document.querySelectorAll('.char-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.portrait-overlay').forEach(o => o.classList.remove('visible'));
+
+      const base = document.querySelector('.portrait-base');
+      const placeholder = document.getElementById('portraitPlaceholder');
+
+      if (activeChar === key) {
+        // Toggle off — restore default
+        activeChar = null;
+        document.getElementById('charInfo').classList.remove('visible');
+        if (base) base.style.opacity = '1';
+        placeholder.style.display = '';
+        return;
+      }
+
+      activeChar = key;
+
+      // Activate button
+      const btn = document.querySelector('[data-key="' + key + '"]');
+      if (btn) btn.classList.add('active');
+
+      // Show portrait overlay — hide default image underneath
+      const overlay = document.getElementById('portrait-' + key);
+      if (overlay && overlay.style.display !== 'none') {
+        overlay.classList.add('visible');
+        if (base) base.style.opacity = '0';
+        placeholder.style.display = 'none';
+      } else {
+        // No portrait file yet — show placeholder, hide default
+        if (base) base.style.opacity = '0';
+        placeholder.style.display = '';
+      }
+
+      // Show info panel
+      const char = CHARACTERS.find(c => c.key === key);
+      if (char) {
+        document.getElementById('charName').textContent = char.name;
+        document.getElementById('charRole').textContent = char.role;
+        document.getElementById('charInfo').classList.add('visible');
+      }
+    }
+
+    function stepChar(dir) {
+      var idx = CHARACTERS.findIndex(function(c){ return c.key === activeChar; });
+      if (idx === -1) {
+        idx = dir > 0 ? 0 : CHARACTERS.length - 1;
+      } else {
+        idx = (idx + dir + CHARACTERS.length) % CHARACTERS.length;
+      }
+      var key = CHARACTERS[idx].key;
+      if (activeChar === key) return;
+      selectChar(key);
+      scrollActiveIntoView(key);
+    }
+
+    function scrollActiveIntoView(key) {
+      var btn = document.querySelector('[data-key="' + key + '"]');
+      if (btn && btn.scrollIntoView) {
+        btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+    }
+
+    (function () {
+      var prev = document.getElementById('charPrev');
+      var next = document.getElementById('charNext');
+      if (CHARACTERS.length < 2) {
+        if (prev) prev.style.display = 'none';
+        if (next) next.style.display = 'none';
+      } else {
+        if (prev) prev.addEventListener('click', function(){ stepChar(-1); });
+        if (next) next.addEventListener('click', function(){ stepChar(1); });
+      }
+    })();
+
+    drawPlaceholderStar();
+  </script>
+
+
+  <script>
+    (function() {
+      var LANG_MAP = {
+        'index.html':         'index-ua.html',
+        'gemstones.html':     'gemstones-ua.html',
+        'locations.html':     'locations-ua.html',
+        'team.html':          'team-ua.html',
+        'index-ua.html':      'index.html',
+        'gemstones-ua.html':  'gemstones.html',
+        'locations-ua.html':  'locations.html',
+        'team-ua.html':       'team.html',
+      };
+
+      function getCurrentPage() {
+        var path = window.location.pathname;
+        return path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+      }
+
+      function isUAPage() {
+        return getCurrentPage().endsWith('-ua.html') ||
+               getCurrentPage().includes('-ua/');
+      }
+
+      window.switchLang = function(lang) {
+        localStorage.setItem('zelkyr-lang', lang);
+        var page = getCurrentPage();
+        var dest;
+        if (page.includes('chapter-')) {
+          dest = lang === 'ua'
+            ? page.replace(/(-ua)?\.html$/, '-ua.html')
+            : page.replace('-ua.html', '.html');
+        } else {
+          dest = lang === 'ua'
+            ? (LANG_MAP[page] && LANG_MAP[page].endsWith('-ua.html') ? LANG_MAP[page] : page.replace('.html', '-ua.html'))
+            : (LANG_MAP[page] && !LANG_MAP[page].endsWith('-ua.html') ? LANG_MAP[page] : page.replace('-ua.html', '.html'));
+        }
+        if (dest && dest !== page) window.location.href = dest;
+      };
+
+      // Set active button
+      var ua = isUAPage();
+      var btnEn = document.getElementById('btn-en');
+      var btnUa = document.getElementById('btn-ua');
+      if (btnEn) btnEn.classList.toggle('active', !ua);
+      if (btnUa) btnUa.classList.toggle('active', ua);
+
+      // Auto-redirect based on saved language 
+      var saved = localStorage.getItem('zelkyr-lang');
+      if (saved && !sessionStorage.getItem('lang-redirected')) {
+        var ua = isUAPage();
+        if (saved === 'ua' && !ua) {
+          sessionStorage.setItem('lang-redirected', '1');
+          switchLang('ua');
+        } else if (saved === 'en' && ua) {
+          sessionStorage.setItem('lang-redirected', '1');
+          switchLang('en');
+        }
+      }
+    })();
+  </script>
+</body>
+</html>
+
