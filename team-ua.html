@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Команда · Зелкир</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-04HKWR5P71"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-04HKWR5P71');
+  </script>
+  <style>
+    /* ── Team page layout ── */
+    .team-page {
+      padding: 1.5rem 0 4rem;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+
+    /* ── Individual card ── */
+    .team-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.8rem;
+    }
+
+    .team-portrait {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border: 1px solid var(--border2);
+      background: #0e0b07;
+      overflow: hidden;
+    }
+
+    .team-portrait::after {
+      content: '';
+      position: absolute;
+      inset: 4px;
+      border: 1px solid var(--border);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .team-portrait img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Placeholder when no image */
+    .team-portrait-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-size: 0.55rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--border2);
+    }
+
+    .team-name {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      color: var(--gold2);
+      letter-spacing: 0.06em;
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+    }
+
+    .team-role {
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .team-link {
+      font-family: var(--font-heading);
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border2);
+      padding-bottom: 1px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .team-link:hover {
+      color: var(--gold);
+      border-color: var(--gold);
+    }
+
+    @media (max-width: 640px) {
+      .team-grid {
+        /* minmax(0,1fr) — plain 1fr has an auto minimum, so a long
+           unbreakable role string widens its column and breaks the grid */
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.2rem;
+      }
+      .team-card {
+        width: 100%;
+      }
+      .team-portrait {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+      }
+    }
+  </style>
+
+  <style id="lang-style">
+    #lang-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      position: fixed;
+      top: 1rem;
+      right: 1.5rem;
+      z-index: 400;
+    }
+    @media (max-width: 640px) {
+      #lang-toggle {
+        position: static;
+        justify-content: flex-end;
+        padding: 0.5rem 0 0;
+      }
+    }
+    .lang-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-heading);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.4rem;
+      border-radius: 2px;
+      transition: color 0.2s, background 0.2s;
+      color: var(--muted);
+    }
+    .lang-btn.active {
+      color: var(--gold);
+      background: #1a130d;
+      border: 1px solid var(--border2);
+    }
+    .lang-btn:hover:not(.active) { color: var(--text); }
+    .lang-sep { color: var(--border2); font-size: 0.5rem; }
+  </style>
+</head>
+<body>
+
+
+  <!-- Language toggle -->
+  <div id="lang-toggle">
+    <button class="lang-btn" id="btn-en" onclick="switchLang('en')">EN</button>
+    <span class="lang-sep">|</span>
+    <button class="lang-btn" id="btn-ua" onclick="switchLang('ua')">UA</button>
+  </div>
+
+  <div class="grain"></div>
+  <canvas id="border-left" class="border-canvas border-side border-left"></canvas>
+  <canvas id="border-right" class="border-canvas border-side border-right"></canvas>
+  <canvas id="border-top" class="border-canvas border-top"></canvas>
+
+  <div class="site-wrap">
+
+    <div class="chapter-back" style="padding: 2rem 0 0;">
+      <a href="index-ua.html">← Зелкир</a>
+    </div>
+
+    <div class="ornament-bar" style="margin-top:1rem;">
+      <canvas id="orn-bar" width="640" height="28"></canvas>
+    </div>
+
+    <header class="chapter-header">
+      <div class="section-head">
+        <span class="section-diamond"></span>
+        <span class="section-label">Зелкир</span>
+        <span class="section-diamond"></span>
+      </div>
+      <h1 class="chapter-title-large">Ковен Співтворців</h1>
+    </header>
+
+    <div class="team-page">
+      <div class="team-grid" id="teamGrid">
+        <!-- Cards generated by JS -->
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <canvas id="footer-star" width="40" height="40"></canvas>
+      <p>&copy; 2025<span id="yr-range"></span> &nbsp;·&nbsp; Іфігенія. Усі права захищені. «Зелкир» є художнім твором. Усі персонажі та події є вигаданими. Містить теми для дорослих. Рекомендовано читачам від 18 років. Жодна частина цього твору не може бути відтворена без письмового дозволу.</p>
+    </footer>
+
+  </div>
+
+  <canvas id="border-bottom" class="border-canvas border-bottom"></canvas>
+
+  <script src="ornaments.js"></script>
+  <script>
+    var cur = new Date().getFullYear(); if (cur > 2025) { document.getElementById('yr-range').textContent = '\u2013' + cur; }
+    
+    const TEAM = [
+      {
+        key:  'creator1',
+        name: 'Ifigeniya',
+        role: 'Автор/Композитор/Розробник/Редактор',
+        link: 'https://buymeacoffee.com/ifigeniya',
+        linkLabel: 'Підтримати',
+      },
+      {
+        key:  'creator2',
+        name: 'flargie',
+        role: 'Художник персонажів',
+        link: 'https://linktr.ee/flargie',
+        linkLabel: 'Linktree',
+      },
+      {
+        key:  'creator3',
+        name: 'Анастасія "Лілла"',
+        role: 'Перекладач/Редактор',
+        link: 'mailto:maykkrrl@gmail.com',
+        linkLabel: 'Email',
+      },
+      {
+        key:  'creator4',
+        name: 'Lethendralis',
+        role: 'Художник краєвидів',
+        link: 'https://linktr.ee/lethendralis',
+        linkLabel: 'Linktree',
+      },
+      {
+        key:  'creator5',
+        name: 'Anta Frirean',
+        role: 'Ілюстратор',
+        link: "https://www.instagram.com/anta_arf",
+        linkLabel: 'Instagram',
+      },
+      {
+        key:  'creator6',
+        name: 'Weltenwanderer',
+        role: 'Ілюстратор',
+        link: 'https://linktr.ee/weltenwanderer',
+        linkLabel: 'Linktree',
+      },
+      {
+        key:  'creator7',
+        name: 'inthestardust',
+        role: 'Дизайнер Одягу',
+        link: null,
+        linkLabel: null,
+      },
+      {
+        key:  'creator8',
+        name: 'BogaMyr',
+        role: 'Художник персонажів',
+        link: 'https://x.com/BogaMyr',
+        linkLabel: 'Twitter',
+      },
+      {
+        key:  'creator9',
+        name: 'Яра',
+        role: 'Художник персонажів',
+        link: 'https://linktr.ee/yara_aaaa',
+        linkLabel: 'Linktree',
+      },
+      {
+        key:  'creator10',
+        name: 'Roma Gewska',
+        role: 'Ілюстратор',
+        link: 'https://www.instagram.com/gewska',
+        linkLabel: 'Instagram',
+      },
+      {
+        key:  'creator11',
+        name: 'Klochechka',
+        role: 'Художник персонажів',
+        link: 'klochechka.carrd.co',
+        linkLabel: 'Card',
+      },
+  {
+        key:  'creator12',
+        name: 'Вячеслав Шульга',
+        role: 'Дизайнер обладунків й зброї',
+        link: 'https://x.com/VicheslavShulga',
+        linkLabel: 'Twitter',
+      },
+      {
+        key:  'creator13',
+        name: 'Роман Дубина',
+        role: 'Художник краєвидів',
+        link: 'https://x.com/RockFunRoman',
+        linkLabel: 'Twitter',
+      },
+      {
+        key:  'creator14',
+        name: 'Gniv',
+        role: '???',
+        link: null,
+        linkLabel: null,
+      },
+      {
+        key:  'creator15',
+        name: 'sofiia lyt',
+        role: 'Художниця тваринних персонажів',
+        link: 'https://www.instagram.com/sofiialyt',
+        linkLabel: 'Instagram',
+      },
+    ];
+
+    // ── Build cards ──
+    const grid = document.getElementById('teamGrid');
+
+    TEAM.forEach(function(member) {
+      const card = document.createElement('div');
+      card.className = 'team-card';
+
+      // Portrait
+      const portrait = document.createElement('div');
+      portrait.className = 'team-portrait';
+
+      const img = document.createElement('img');
+      img.src = 'images/team-' + member.key + '.png';
+      img.alt = member.name;
+      img.onerror = function() {
+        this.style.display = 'none';
+        var ph = document.createElement('div');
+        ph.className = 'team-portrait-placeholder';
+        ph.textContent = 'Photo';
+        portrait.appendChild(ph);
+      };
+      portrait.appendChild(img);
+      card.appendChild(portrait);
+
+      // Name
+      const name = document.createElement('div');
+      name.className = 'team-name';
+      name.textContent = member.name;
+      card.appendChild(name);
+
+      // Role
+      const role = document.createElement('div');
+      role.className = 'team-role';
+      role.textContent = member.role;
+      card.appendChild(role);
+
+      // Link
+      if (member.link) {
+        const link = document.createElement('a');
+        link.className = 'team-link';
+        link.href = member.link;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = member.linkLabel || 'Visit';
+        card.appendChild(link);
+      }
+
+      grid.appendChild(card);
+    });
+  </script>
+
+
+  <script>
+    (function() {
+      var LANG_MAP = {
+        'index.html':         'index-ua.html',
+        'gemstones.html':     'gemstones-ua.html',
+        'characters.html':    'characters-ua.html',
+        'team.html':          'team-ua.html',
+        'index-ua.html':      'index.html',
+        'gemstones-ua.html':  'gemstones.html',
+        'characters-ua.html': 'characters.html',
+        'team-ua.html':       'team.html',
+      };
+
+      function getCurrentPage() {
+        var path = window.location.pathname;
+        return path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+      }
+
+      function isUAPage() {
+        return getCurrentPage().endsWith('-ua.html') ||
+               getCurrentPage().includes('-ua/');
+      }
+
+      window.switchLang = function(lang) {
+        localStorage.setItem('zelkyr-lang', lang);
+        var page = getCurrentPage();
+        var dest;
+        if (page.includes('chapter-')) {
+          dest = lang === 'ua'
+            ? page.replace(/(-ua)?\.html$/, '-ua.html')
+            : page.replace('-ua.html', '.html');
+        } else {
+          dest = lang === 'ua'
+            ? (LANG_MAP[page] && LANG_MAP[page].endsWith('-ua.html') ? LANG_MAP[page] : page.replace('.html', '-ua.html'))
+            : (LANG_MAP[page] && !LANG_MAP[page].endsWith('-ua.html') ? LANG_MAP[page] : page.replace('-ua.html', '.html'));
+        }
+        if (dest && dest !== page) window.location.href = dest;
+      };
+
+      // Set active button
+      var ua = isUAPage();
+      var btnEn = document.getElementById('btn-en');
+      var btnUa = document.getElementById('btn-ua');
+      if (btnEn) btnEn.classList.toggle('active', !ua);
+      if (btnUa) btnUa.classList.toggle('active', ua);
+
+      // Auto-redirect based on saved language 
+      var saved = localStorage.getItem('zelkyr-lang');
+      if (saved && !sessionStorage.getItem('lang-redirected')) {
+        var ua = isUAPage();
+        if (saved === 'ua' && !ua) {
+          sessionStorage.setItem('lang-redirected', '1');
+          switchLang('ua');
+        } else if (saved === 'en' && ua) {
+          sessionStorage.setItem('lang-redirected', '1');
+          switchLang('en');
+        }
+      }
+    })();
+  </script>
+</body>
+</html>
