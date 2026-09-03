@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Персонажі · Зелкир</title>
+  <title>Локації · Зелкир</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -11,6 +11,9 @@
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
   <style>
+    /* Widen container to match the gemstones page */
+    .site-wrap { max-width: 1100px; }
+
     /* ── Page layout ── */
     .characters-page {
       display: flex;
@@ -23,9 +26,8 @@
     .portrait-frame {
       position: relative;
       width: 100%;
-      /* no fixed aspect-ratio — the portrait itself sets the height so the
-         frame hugs it instead of letterboxing */
-      max-width: 420px;
+      max-width: 100%;
+      /* only a floor for the placeholder state — the image sets the height */
       min-height: 260px;
       margin: 0 auto;
       line-height: 0;
@@ -56,7 +58,7 @@
 
     .portrait-img { transition: opacity 0.5s ease; }
 
-    /* The portrait defines the frame's height */
+    /* Base image defines the banner height */
     .portrait-base {
       position: relative;
       display: block;
@@ -66,6 +68,7 @@
       z-index: 1;
       opacity: 1;
     }
+    /* Overlays sit on top, matched to the base image box */
 
     /* Placeholder when no image */
     .portrait-placeholder {
@@ -168,6 +171,8 @@
       background: #1a130d;
     }
     .char-arrow:active { background: #1e1508; }
+    /* only one entry to move between */
+    .char-arrow.is-lonely { opacity: 0.4; }
 
     /* ── Info panel ── */
     .char-info {
@@ -205,7 +210,8 @@
     }
 
     @media (max-width: 640px) {
-      .portrait-frame { max-width: 280px; }
+      .portrait-frame { width: 100%; min-width: 0; max-width: 100%; }
+      .portrait-base { width: 100%; max-width: 100%; }
     }
   </style>
   <!-- Google Analytics -->
@@ -280,7 +286,7 @@
         <span class="section-label">Зелкир</span>
         <span class="section-diamond"></span>
       </div>
-      <h1 class="chapter-title-large">Персонажі</h1>
+      <h1 class="chapter-title-large">Локації</h1>
     </header>
 
     <div class="characters-page">
@@ -288,13 +294,13 @@
       <!-- Portrait frame -->
       <div class="portrait-frame" id="portraitFrame">
         <img class="portrait-img portrait-base"
-             src="images/portrait-default.png"
-             alt="Character"
+             src="images/location-default.jpg"
+             alt="Локація"
              onerror="this.style.display='none'" />
         <div class="portrait-placeholder" id="portraitPlaceholder">
           <canvas id="cPortraitStar" width="80" height="80"></canvas>
           <div class="portrait-placeholder-text">
-            Оберіть персонажа нижче
+            Оберіть локацію нижче
           </div>
         </div>
       </div>
@@ -328,28 +334,14 @@
   <canvas id="border-bottom" class="border-canvas border-bottom"></canvas>
 
   <script src="ornaments.js"></script>
+  <script src="lightbox.js"></script>
   <script>
     var cur = new Date().getFullYear(); if (cur > 2025) { document.getElementById('yr-range').textContent = '\u2013' + cur; }
 
     const CHARACTERS = [
       {
-        key:  'lukyan',
-        name: 'Лук\'ян',
-        role: '???',
-      },
-      {
-        key:  'andrian',
-        name: 'Андріан',
-        role: '???',
-      },
-      {
-        key:  'nestor',
-        name: 'Нестор',
-        role: '???',
-      },
-      {
-        key:  'janek',
-        name: 'Янек',
+        key:  'nidze',
+        name: 'Нідзе',
         role: '???',
       },
     ];
@@ -391,7 +383,7 @@
 
     // ── Select character ──
     let activeChar = null;
-    const DEFAULT_IMG = 'images/portrait-default.png';
+    const DEFAULT_IMG = 'images/location-default.jpg';
 
     function selectChar(key) {
       document.querySelectorAll('.char-btn').forEach(b => b.classList.remove('active'));
@@ -400,7 +392,7 @@
       const placeholder = document.getElementById('portraitPlaceholder');
 
       if (activeChar === key) {
-        // Toggle off — back to the default portrait
+        // Toggle off — back to the default image
         activeChar = null;
         document.getElementById('charInfo').classList.remove('visible');
         if (base) { base.style.display = ''; base.src = DEFAULT_IMG; }
@@ -413,8 +405,8 @@
       const btn = document.querySelector('[data-key="' + key + '"]');
       if (btn) btn.classList.add('active');
 
-      /* The chosen portrait becomes the base image, so the frame takes its
-         shape and the art fills it with no empty bars. */
+      /* The chosen image becomes the base, so the frame takes its shape and
+         the art fills it edge to edge — same as the altar page. */
       if (base) {
         base.onerror = function () {
           this.style.display = 'none';
@@ -424,7 +416,7 @@
           this.style.display = '';
           placeholder.style.display = 'none';
         };
-        base.src = 'images/portrait-' + key + '.png';
+        base.src = 'images/location-' + key + '.jpg';
       }
 
       const char = CHARACTERS.find(c => c.key === key);
@@ -458,13 +450,14 @@
     (function () {
       var prev = document.getElementById('charPrev');
       var next = document.getElementById('charNext');
+      // Arrows stay visible even with a single entry; with one location they
+      // simply select it. They dim so it's clear there's nowhere else to go.
       if (CHARACTERS.length < 2) {
-        if (prev) prev.style.display = 'none';
-        if (next) next.style.display = 'none';
-      } else {
-        if (prev) prev.addEventListener('click', function(){ stepChar(-1); });
-        if (next) next.addEventListener('click', function(){ stepChar(1); });
+        if (prev) prev.classList.add('is-lonely');
+        if (next) next.classList.add('is-lonely');
       }
+      if (prev) prev.addEventListener('click', function(){ stepChar(-1); });
+      if (next) next.addEventListener('click', function(){ stepChar(1); });
     })();
 
     drawPlaceholderStar();
@@ -476,11 +469,11 @@
       var LANG_MAP = {
         'index.html':         'index-ua.html',
         'gemstones.html':     'gemstones-ua.html',
-        'characters.html':    'characters-ua.html',
+        'locations.html':     'locations-ua.html',
         'team.html':          'team-ua.html',
         'index-ua.html':      'index.html',
         'gemstones-ua.html':  'gemstones.html',
-        'characters-ua.html': 'characters.html',
+        'locations-ua.html':  'locations.html',
         'team-ua.html':       'team.html',
       };
 

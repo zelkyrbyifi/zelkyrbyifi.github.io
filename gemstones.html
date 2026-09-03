@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gemstone Glossary · Zelkyr</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <style>
+    /* Widen container for altar image */
+    .site-wrap { max-width: 1100px; }
+
+    /* ── Full-width layout ── */
+    .gemstone-page {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      padding: 1.5rem 0 4rem;
+    }
+
+    /* ── Altar frame — full width, tall ── */
+    .altar-frame {
+      position: relative;
+      width: 100%;
+      border: 1px solid var(--border2);
+      background: #0e0b07;
+      overflow: hidden;
+    }
+
+    .altar-frame::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, #c8923a08 0%, transparent 30%), linear-gradient(to top, #c8923a06 0%, transparent 30%);
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .altar-frame::after {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border: 1px solid var(--border);
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .altar-img {
+      transition: opacity 0.5s ease;
+    }
+
+    /* Base image defines the frame's height */
+    .altar-base {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: auto;
+      z-index: 1;
+      opacity: 1;
+    }
+
+    /* The chosen gem, shown on the altar over the prompt text.
+       --gem-top sets how far down the altar it sits. */
+    .gem-on-altar {
+      position: absolute;
+      left: 50%;
+      top: var(--gem-top, 62%);
+      transform: translate(-50%, -50%);
+      width: min(38%, 260px);
+      height: auto;
+      object-fit: contain;
+      z-index: 4;
+      opacity: 0;
+      transition: opacity 0.45s ease;
+      pointer-events: none;
+      filter: drop-shadow(0 0 26px #e8b84a55) drop-shadow(0 0 60px #c8923a33);
+    }
+    .gem-on-altar.visible { opacity: 1; }
+
+    /* ── Altar owner toggle ── */
+    .altar-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 0 auto 1rem;
+    }
+    .altar-toggle-btn {
+      background: #12100c;
+      border: 1px solid var(--border2);
+      cursor: pointer;
+      padding: 0.45rem 1.4rem;
+      border-radius: 999px;
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--muted);
+      white-space: nowrap;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .altar-toggle-btn:hover {
+      color: var(--text);
+      border-color: var(--gold-dim);
+      background: #1a130d;
+    }
+    .altar-toggle-btn.active {
+      color: var(--gold);
+      border-color: var(--gold);
+      background: #1e1508;
+    }
+
+    /* Placeholder when no image */
+    .altar-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      /* how far down the altar the prompt sits */
+      padding-top: var(--prompt-top, 62%);
+      gap: 1rem;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .altar-placeholder-text {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      letter-spacing: 0.1em;
+      /* nudge right of centre; raise the value to shift further */
+      transform: translateX(var(--prompt-shift, 7%));
+      animation: promptPulse 2.5s ease-in-out infinite;
+      text-transform: uppercase;
+      color: var(--gold2);
+      text-align: center;
+      padding: 0 2rem;
+      /* the UA string is ~57% longer than the EN one — a tighter leading and
+         a capped measure keep it from running past the bottom of the frame */
+      max-width: 34ch;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+
+    /* same pulse the splash Enter button uses */
+    @keyframes promptPulse {
+      0%, 100% { text-shadow: none; }
+      50%      { text-shadow: 0 0 16px #e8b84a99, 0 0 32px #c8923a55; }
+    }
+
+    .gem-placeholder {
+      position: absolute;
+      left: 50%;
+      top: var(--gem-top, 62%);
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      z-index: 4;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+    }
+
+    .gem-placeholder.visible { opacity: 1; }
+
+    /* ── Horizontal pill row ── */
+    /* ── Pill row arrows (same pattern as characters/locations) ── */
+    .school-pill-nav {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
+    }
+    .school-arrow {
+      flex-shrink: 0;
+      background: #12100c;
+      border: 1px solid var(--border2);
+      color: var(--muted);
+      width: 2.1rem;
+      height: 2.1rem;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      line-height: 1;
+      user-select: none;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .school-arrow:hover {
+      color: var(--gold);
+      border-color: var(--gold-dim);
+      background: #1a130d;
+    }
+    .school-arrow:active { background: #1e1508; }
+
+    .school-pill-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+    }
+
+    .school-pill-wrap::-webkit-scrollbar { display: none; }
+
+    .school-pill-row {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.4rem 0.2rem;
+      width: max-content;
+    }
+
+    .school-group-pills {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    .group-sep {
+      width: 1px;
+      height: 1.4rem;
+      background: var(--border2);
+      flex-shrink: 0;
+      margin: 0 0.2rem;
+    }
+
+    .school-btn {
+      background: #12100c;
+      border: 1px solid var(--border2);
+      cursor: pointer;
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: 0.82rem;
+      color: var(--muted);
+      white-space: nowrap;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .school-btn:hover {
+      color: var(--text);
+      border-color: var(--gold-dim);
+      background: #1a130d;
+    }
+
+    .school-btn.active {
+      color: var(--gold);
+      border-color: var(--gold);
+      background: #1e1508;
+    }
+
+    /* ── Info panel ── */
+    .school-info {
+      position: relative;
+      width: 100%;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      border-top: 1px solid var(--border2);
+      padding-top: 1.2rem;
+    }
+
+    .school-info.visible { opacity: 1; transform: translateY(0); }
+
+    .info-header {
+      display: flex;
+      align-items: baseline;
+      gap: 0.8rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid var(--border2);
+      margin-bottom: 0.8rem;
+    }
+
+    .info-school-name {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--gold2);
+      letter-spacing: 0.06em;
+    }
+
+    .info-sub {
+      font-family: var(--font-heading);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .tier-list { list-style: none; }
+
+    .tier-row {
+      display: grid;
+      grid-template-columns: 3.5rem 1px 1fr;
+      gap: 0.8rem;
+      align-items: baseline;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tier-label {
+      font-family: var(--font-heading);
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-align: right;
+    }
+
+    .tier-divider { width: 1px; height: 1rem; background: var(--border2); }
+    .tier-content { font-size: 0.9rem; }
+    .tier-gem { font-style: italic; color: var(--text); }
+
+
+    /* ── Gemstone names, styled as pills so they read as clickable ── */
+    .gem-link {
+      display: inline-flex;
+      align-items: center;
+      background: #12100c;
+      border: 1px solid var(--border2);
+      border-radius: 999px;
+      padding: 0.3rem 0.85rem;
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--text);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .gem-link:hover {
+      color: var(--gold2);
+      border-color: var(--gold);
+      background: #1a130d;
+    }
+    .gem-link.active {
+      color: var(--gold2);
+      border-color: var(--gold2);
+      background: #1e1508;
+    }
+    .tier-desc { font-size: 0.8rem; color: var(--muted); display: block; margin-top: 0.35rem; line-height: 1.5; }
+    .tier-special .tier-label { color: #c49020; }
+
+    .info-note {
+      margin-top: 0.8rem;
+      font-size: 0.8rem;
+      font-style: italic;
+      color: var(--muted);
+      padding-top: 0.6rem;
+      border-top: 1px solid var(--border);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 640px) {
+      /* the altar sits edge to edge on a phone */
+      .site-wrap { padding: 0 1rem; }
+
+      /* owner toggle: let the two pills wrap instead of overflowing */
+      .altar-toggle { flex-wrap: wrap; }
+      .altar-toggle-btn { font-size: 0.85rem; padding: 0.4rem 1rem; }
+
+      /* prompt: smaller and higher so it stays inside the frame */
+      .altar-placeholder { padding-top: var(--prompt-top, 55%); }
+      .altar-placeholder-text {
+        font-size: 0.72rem;
+        letter-spacing: 0.06em;
+        padding: 0 0.75rem;
+        max-width: 30ch;
+        transform: translateX(var(--prompt-shift, 4%));
+      }
+
+      /* the gem needs more of the frame on a small screen */
+      .gem-on-altar { width: min(52%, 200px); }
+
+      /* arrows a touch smaller, pills easier to hit */
+      .school-arrow { width: 1.9rem; height: 1.9rem; font-size: 0.9rem; }
+      .school-btn { font-size: 0.8rem; padding: 0.35rem 0.8rem; }
+
+      /* tier rows stack rather than squeezing three columns */
+      .tier-row { gap: 0.6rem; }
+      .tier-content { font-size: 0.85rem; }
+      .gem-link { font-size: 0.85rem; padding: 0.3rem 0.75rem; }
+    }
+  </style>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-04HKWR5P71"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-04HKWR5P71');
+  </script>
+
+  <style id="lang-style">
+    #lang-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      position: fixed;
+      top: 1rem;
+      right: 1.5rem;
+      z-index: 400;
+    }
+    .lang-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-heading);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.4rem;
+      border-radius: 2px;
+      transition: color 0.2s, background 0.2s;
+      color: var(--muted);
+    }
+    .lang-btn.active {
+      color: var(--gold);
+      background: #1a130d;
+      border: 1px solid var(--border2);
+    }
+    .lang-btn:hover:not(.active) { color: var(--text); }
+    .lang-sep { color: var(--border2); font-size: 0.5rem; }
+  </style>
+</head>
+<body class="section-page">
+
+
+  <!-- Language toggle -->
+  <div id="lang-toggle">
+    <button class="lang-btn" id="btn-en" onclick="switchLang('en')">EN</button>
+    <span class="lang-sep">|</span>
+    <button class="lang-btn" id="btn-ua" onclick="switchLang('ua')">UA</button>
+  </div>
+
+  <div class="grain"></div>
+  <canvas id="border-left" class="border-canvas border-side border-left"></canvas>
+  <canvas id="border-right" class="border-canvas border-side border-right"></canvas>
+  <canvas id="border-top" class="border-canvas border-top"></canvas>
+
+  <div class="site-wrap">
+
+    <div class="chapter-back" style="padding: 2rem 0 0;">
+      <a href="index.html">← Zelkyr</a>
+    </div>
+
+    <div class="ornament-bar" style="margin-top:1rem;">
+      <canvas id="orn-bar" width="640" height="28"></canvas>
+    </div>
+
+    <header class="chapter-header">
+      <div class="section-head">
+        <span class="section-diamond"></span>
+        <span class="section-label">Tyrian Witchcraft</span>
+        <span class="section-diamond"></span>
+      </div>
+      <h1 class="chapter-title-large">Gemstone Glossary</h1>
+    </header>
+
+    <div class="gemstone-page">
+
+      <!-- Altar owner toggle -->
+      <div class="altar-toggle" id="altarToggle">
+        <button class="altar-toggle-btn active" data-altar="nestor">Nestor's Vanity</button>
+        <button class="altar-toggle-btn" data-altar="pelagiya">Pelagiya's Vanity</button>
+      </div>
+
+      <!-- Full-width altar image -->
+      <div class="altar-frame" id="altarFrame">
+        <img class="altar-img altar-base" id="altarBase" src="images/altar-nestor.jpg" alt="Altar" onerror="this.style.display='none'" />
+        <div class="altar-placeholder" id="altarPlaceholder">
+          <div class="altar-placeholder-text">
+            Select a school of magic below to see its gemstones
+          </div>
+        </div>
+        <div class="gem-placeholder" id="gemPlaceholder">
+          <canvas id="cGemPreview" width="120" height="120"></canvas>
+        </div>
+        <img class="gem-on-altar" id="gemOnAltar" src="" alt="" />
+      </div>
+
+      <!-- Horizontal scrollable pill row -->
+      <div class="school-pill-nav">
+        <button class="school-arrow" id="schoolPrev" aria-label="Previous">&#8249;</button>
+        <div class="school-pill-wrap">
+        <div class="school-pill-row">
+
+          <div class="group-sep"></div>
+
+          <div class="school-group-pills">
+            <button class="school-btn" data-school="Ruynomancy">Ruynomancy</button>
+          </div>
+
+          <div class="group-sep"></div>
+
+          <div class="school-group-pills">
+            <button class="school-btn" data-school="Efiromancy">Efiromancy</button>
+          </div>
+
+          <div class="group-sep"></div>
+
+          <div class="school-group-pills">
+            <button class="school-btn" data-school="Vodomancy">Vodomancy</button>
+            <button class="school-btn" data-school="Mrozomancy">Mrozomancy</button>
+            <button class="school-btn" data-school="Vohnomancy">Vohnomancy</button>
+            <button class="school-btn" data-school="Zemlemancy">Zemlemancy</button>
+          </div>
+
+          <div class="group-sep"></div>
+
+          <div class="school-group-pills">
+            <button class="school-btn" data-school="Zlenomancy">Zlenomancy</button>
+            <button class="school-btn" data-school="Zviromancy">Zviromancy</button>
+            <button class="school-btn" data-school="Zdrovomancy">Zdrovomancy</button>
+            <button class="school-btn" data-school="Zminomancy">Zminomancy</button>
+            <button class="school-btn" data-school="Svidomancy">Svidomancy</button>
+          </div>
+
+          <div class="group-sep"></div>
+
+        </div>
+        </div>
+        <button class="school-arrow" id="schoolNext" aria-label="Next">&#8250;</button>
+      </div>
+
+      <!-- Info panel -->
+      <div class="school-info" id="schoolInfo">
+        <div class="info-header">
+          <div class="info-school-name" id="infoName"></div>
+          <div class="info-sub" id="infoSub"></div>
+        </div>
+        <ul class="tier-list" id="tierList"></ul>
+        <div class="info-note" id="infoNote" style="display:none;"></div>
+      </div>
+
+    </div>
+
+    <footer class="site-footer">
+      <canvas id="footer-star" width="40" height="40"></canvas>
+      <p>&copy; <span id="yr"></span> &nbsp;·&nbsp; All rights reserved</p>
+    </footer>
+
+  </div>
+
+  <canvas id="border-bottom" class="border-canvas border-bottom"></canvas>
+
+  <script src="ornaments.js"></script>
+  <script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // ── Canon gemstone data (from gemstone_specialty_reference.html) ──
+    const SCHOOLS = {
+      'Zlenomancy':  { sub:'Plant', color:'#3B6D11', tiers:[
+        {t:'Tier I',   gem:'Moss Agate',        desc:'Cultivator\'s stone; encourages growth, fertility, and calm harmony with nature.'},
+        {t:'Tier II',  gem:'Peridot',            desc:'Channels sunlight and renewal; revives exhausted flora and restores vigor.'},
+        {t:'Tier III', gem:'Green Tourmaline',   desc:'Channels natural vitality; breathes with the forest and deepens plant resonance.'},
+        {t:'Tier IV',  gem:'Emerald',            desc:'Symbol of rebirth and eternal spring; strengthens bond with plant spirits.'},
+        {t:'Tier V',   gem:'Demantoid',          desc:'Rarest of the green gems; radiates an inner fire that mirrors the life force itself.'},
+      ]},
+      'Zviromancy':  { sub:'Animal', color:'#854F0B', tiers:[
+        {t:'Tier I',   gem:'Amber',              desc:'Fossilized sunlight preserving ancient life; heightens empathy between witch and beast.'},
+        {t:'Tier II',  gem:'Tiger\'s Eye',       desc:'Enhances reflexes, courage, and instinct; focuses mind and body of the tamer.'},
+        {t:'Tier III', gem:'Moonstone',          desc:'Fosters emotional intuition; guides animal communication through shared feeling.'},
+        {t:'Tier IV',  gem:'Cymophane',          desc:'Sharing a mind with the beast.'},
+      ]},
+      'Vodomancy':   { sub:'Water', color:'#185FA5', tiers:[
+        {t:'Tier I',   gem:'Pearl',              desc:'Lunar conduit of purity; perfects harmony between body, spirit, and wave.'},
+        {t:'Tier II',  gem:'Aquamarine',         desc:'Brings calm, balance, and safe passage through emotion and tide.'},
+        {t:'Tier III', gem:'Lapis Lazuli',       desc:'Enhances insight and spiritual depth; opens the mind like deep water.'},
+        {t:'Tier IV',  gem:'Blue Sapphire',      desc:'Embodies mental discipline and cold focus; the scholar\'s jewel.'},
+      ]},
+      'Vohnomancy':  { sub:'Fire', color:'#993C1D', tiers:[
+        {t:'Tier I',   gem:'Garnet',             desc:'Vital spark of passion and endurance; the ember of every pyromancer.'},
+        {t:'Tier II',  gem:'Sunstone',           desc:'Brings brightness and joy; fuels radiant spells with warmth.'},
+        {t:'Tier III', gem:'Ruby',               desc:'Core of strength and devotion; amplifies the wielder\'s life force.'},
+        {t:'Tier IV',  gem:'Red Beryl',          desc:'Unstable but immensely powerful flame.'},
+      ]},
+      'Zemlemancy':  { sub:'Earth', color:'#5F5E5A', tiers:[
+        {t:'Tier I',   gem:'Jasper',             desc:'Nurturing and grounding; cultivates endurance and stability.'},
+        {t:'Tier II',  gem:'Onyx',               desc:'Strengthens determination and shields from discord.'},
+        {t:'Tier III', gem:'Smoky Quartz',       desc:'Absorbs tremor energy and balances shifting ground.'},
+        {t:'Tier IV',  gem:'Serandite',          desc:'Exceptionally rare mineral of deep geological origin; channels the raw, ancient power of the earth\'s core.'},
+      ]},
+      'Svidomancy':  { sub:'Mind', color:'#72243E', tiers:[
+        {t:'Tier I',   gem:'Fluorite',           desc:'Clarifies thought and memory; aids study and focus.'},
+        {t:'Tier II',  gem:'Amethyst',           desc:'Calms inner turmoil and protects against psychic fatigue.'},
+        {t:'Tier III', gem:'Labradorite',        desc:'Opens intuition; guards the mind during projection.'},
+        {t:'Tier IV',  gem:'Celestite',          desc:'Connects thought to higher consciousness; gem of mental ascension.'},
+        {t:'Tier V',   gem:'Kornerupine',        desc:'Control over a person.'},
+      ]},
+      'Efiromancy':  { sub:'Aether', color:'#534AB7', tiers:[
+        {t:'Tier I',   gem:'Selenite',           desc:'Purifies and aligns energies; gateway to higher planes.'},
+        {t:'Tier II',  gem:'Ametrine',           desc:'Balances opposing forces; stabilizes multi-aspect magic.'},
+        {t:'Tier III', gem:'Diamond',            desc:'Purest amplifier of will; anchors Ether itself into form.'},
+        {t:'Tier IV',  gem:'Benitoite',          desc:'For spell-morphing; truth-revealing, reflection of clarity.'},
+      ]},
+      'Svitlomancy': { sub:'Light', color:'#633806', tiers:[
+        {t:'Tier I',   gem:'Citrine',            desc:'Radiates positivity and clarity; draws inner sunlight outward.'},
+        {t:'Tier II',  gem:'Heliodor',           desc:'Golden brilliance; empowers confidence and divine vision.'},
+        {t:'Tier III', gem:'White Opal',         desc:'Prismatic gem of inspiration; channels holy illumination.'},
+        {t:'Tier IV',  gem:'Jeremejevite',       desc:'Clarity, order, transparency.'},
+      ]},
+      'Mrokomancy':  { sub:'Shadow', color:'#2C2C2A', tiers:[
+        {t:'Tier I',   gem:'Onyx',               desc:'Strengthens resolve in darkness; fosters mastery of silence and stealth.'},
+        {t:'Tier II',  gem:'Labradorite',        desc:'Guides souls between states; clarifies separation of light and dark.'},
+        {t:'Tier II',  gem:'Black Spinel',       desc:'Renews drained strength; deepens shadow manipulation.'},
+        {t:'Tier III', gem:'Bloodstone',         desc:'Represents sacrifice and rebirth; sustains vitality in decay.'},
+        {t:'Tier III', gem:'Black Opal',         desc:'Harnesses void and light together.'},
+        {t:'Tier IV',  gem:'Serendibite',        desc:'Absorbs light and aura.'},
+        {t:'Tier IV',  gem:'Jet',                desc:'Acts as spiritual anchor to the dead.'},
+      ]},
+      'Zdrovomancy': { sub:'Health / Death', color:'#0F6E56', tiers:[
+        {t:'Tier I',   gem:'Green Aventurine',   desc:'Gentle harmonizer; stimulates recovery and renewal.'},
+        {t:'Tier II',  gem:'Rose Quartz',        desc:'Restores emotional balance; opens heart to healing flow.'},
+        {t:'Tier III', gem:'Malachite',          desc:'Extracts ailments and toxins; catalyst of regeneration.'},
+        {t:'Tier IV',  gem:'Chrysoprase',        desc:'Extremely rare healer\'s gem; embodies the unity of body and spirit.'},
+        {t:'Tier V',   gem:'Grandidierite',      desc:'Can bring someone back to life if heart was beating just recently.'},
+      ]},
+      'Vizeromancy':  { sub:'Ornament / Pattern', color:'#3C3489', tiers:[
+        {t:'Tier I',   gem:'Sodalite',           desc:'Encourages structured thought and focus in writing magic.'},
+        {t:'Tier II',  gem:'Quartz',             desc:'Retains energy inscriptions; foundation of basic sigilcraft.'},
+        {t:'Tier III', gem:'Kyanite',            desc:'Rare inscriber\'s crystal; never requires cleansing, perfect for endless sigil use.'},
+      ]},
+      'Ruynomancy':  { sub:'Destruction', color:'#712B13', tiers:[
+        {t:'Tier I',   gem:'Black Tourmaline',   desc:'Absorbs destructive backlash and stabilizes output.'},
+        {t:'Tier II',  gem:'Obsidian',           desc:'Sharp volcanic glass used for cutting or shattering wards.'},
+        {t:'Tier III', gem:'Meteorite',          desc:'Fallen star-metal; annihilates boundaries with cosmic force.'},
+        {t:'Tier IV',  gem:'Musgravite',         desc:'Inner peace in distortion and dimensional tension.'},
+      ]},
+      'Tvorimancy':  { sub:'Creation', color:'#1D9E75', note:'Higher tiers not yet documented.', tiers:[
+        {t:'Tier I',   gem:'Citrine',            desc:'Inspires manifestation and design; starting point for all making.'},
+      ]},
+      'Zminomancy':  { sub:'Transformation', color:'#993556', tiers:[
+        {t:'Tier I',   gem:'Labradorite',        desc:'Facilitates inner transformation and adaptability.'},
+        {t:'Tier II',  gem:'Opal (Milky)',       desc:'Encourages fluidity of identity and form.'},
+        {t:'Tier III', gem:'Chrysoberyl (Cat\'s Eye)', desc:'Enhances foresight during bodily change.'},
+        {t:'Tier IV',  gem:'Alexandrite',        desc:'Gem of dual existence; perfect emblem of metamorphosis.'},
+        {t:'Tier V',   gem:'Tanzanite',          desc:'The shifting hues represent transition, awakening, and the bridge between physical and spiritual planes.'},
+      ]},
+      'Chasomancy':   { sub:'Time', color:'#5F5E5A', note:'Tiers II and III not yet documented.', tiers:[
+        {t:'Tier I',   gem:'Petrified Wood',     desc:'Fossil of ancient ages; embodies time slowed to stillness.'},
+        {t:'Tier II',  gem:'Ammolite',           desc:'Fossilized ammonite shell, millions of years old; iridescent record of deep time.'},
+        {t:'Tier III', gem:'Stichtite',          desc:'Rare mineral of ancient Precambrian formations; holds the slow memory of the earth\'s earliest ages.'},
+        {t:'Tier IV',  gem:'Cerussite',          desc:'Extremely fragile — as time itself becomes when touched too directly.'},
+      ]},
+      'Pravomancy':  { sub:'Law', color:'#3C3489', note:'Lower tiers not yet documented. Painite (Untiered) — the one hidden in the Wastelands of the West, ultimate power.', tiers:[
+        {t:'Tier IV',  gem:'Hackmanite',         desc:'Used to establish the rules of a pact.'},
+        {t:'Tier IV',  gem:'Taafeite',           desc:'Neutralizes magic — to negate.'},
+        {t:'Tier IV',  gem:'Poudretteite',       desc:'Contains the pools of power, suppressing it — to hide.'},
+      ], special:{ gem:'Painite', desc:'Untiered — hidden in the Wastelands of the West. Ultimate power.' }},
+      'Mrozomancy':  { sub:'Ice / Frost', color:'#0C447C', note:'A standalone specialty in Styhiyna. Manipulates thermal kinetic energy — distinct from Vodomantiya despite often affecting water.', tiers:[
+        {t:'Tier I',   gem:'Iolite',             desc:'Stone of endurance and vision; keeps frostcraft steady under pressure.'},
+        {t:'Tier II',  gem:'Cryolite',           desc:'The ice stone — rare, translucent, and naturally attuned to frost.'},
+        {t:'Tier III', gem:'Jeremejevite',       desc:'One of the rarest minerals in the world; pale ice-blue, channels frost at its most refined and absolute.'},
+      ]},
+    };
+
+    // Gem colors for placeholder crystal preview
+    const GEM_COLORS = {
+      'Pravomancy':'#f0e8a0','Tvorimancy':'#a0d8f0',
+      'Ruynomancy':'#d04040','Efiromancy':'#c8a0f8',
+      'Svitlomancy':'#f8f0a0','Mrokomancy':'#806080','Chasomancy':'#8080c0',
+      'Vymiromancy':'#a0b8d8','Vizeromancy':'#d8c880','Vodomancy':'#4080c0',
+      'Mrozomancy':'#c0e0f8','Vohnomancy':'#e85020','Zemlemancy':'#806040',
+      'Zlenomancy':'#40a040','Zviromancy':'#80a060','Zdrovomancy':'#60c080',
+      'Zminomancy':'#c060a0','Svidomancy':'#8060c0',
+    };
+
+    function drawGem(canvas, color) {
+      const DPR = window.devicePixelRatio || 1;
+      const S = 120;
+      canvas.width = S*DPR; canvas.height = S*DPR;
+      canvas.style.width = S+'px'; canvas.style.height = S+'px';
+      const ctx = canvas.getContext('2d');
+      ctx.scale(DPR, DPR);
+      const cx = S/2, cy = S/2;
+      const glow = ctx.createRadialGradient(cx,cy,0,cx,cy,52);
+      glow.addColorStop(0, color+'44'); glow.addColorStop(1,'transparent');
+      ctx.fillStyle=glow; ctx.fillRect(0,0,S,S);
+      const pts=[];
+      for(let i=0;i<8;i++){const a=(i/8)*Math.PI*2-Math.PI/8;pts.push([cx+Math.cos(a)*38,cy+Math.sin(a)*38]);}
+      ctx.beginPath();pts.forEach(([x,y],i)=>i===0?ctx.moveTo(x,y):ctx.lineTo(x,y));ctx.closePath();
+      const fill=ctx.createLinearGradient(cx,cy-38,cx,cy+38);
+      fill.addColorStop(0,color+'cc');fill.addColorStop(0.5,color+'aa');fill.addColorStop(1,color+'66');
+      ctx.fillStyle=fill;ctx.fill();
+      ctx.strokeStyle=color;ctx.lineWidth=1;ctx.globalAlpha=0.7;ctx.stroke();ctx.globalAlpha=1;
+      [0,2,4,6].forEach(i=>{ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(pts[i][0],pts[i][1]);ctx.strokeStyle='#ffffff';ctx.lineWidth=0.5;ctx.globalAlpha=0.2;ctx.stroke();ctx.globalAlpha=1;});
+      ctx.beginPath();ctx.ellipse(cx-10,cy-12,8,5,-Math.PI/4,0,Math.PI*2);ctx.fillStyle='#ffffff';ctx.globalAlpha=0.35;ctx.fill();ctx.globalAlpha=1;
+    }
+
+    function drawAltarStar() {
+      const canvas = document.getElementById('cAltarStar');
+      if (!canvas) return;
+      const DPR = window.devicePixelRatio || 1;
+      const S = 80;
+      canvas.width=S*DPR;canvas.height=S*DPR;canvas.style.width=S+'px';canvas.style.height=S+'px';
+      const ctx=canvas.getContext('2d');ctx.scale(DPR,DPR);
+      const cx=S/2,cy=S/2;
+      ctx.beginPath();
+      for(let i=0;i<16;i++){const a=(i*Math.PI)/8-Math.PI/2;const r=i%2===0?32:14;const x=cx+Math.cos(a)*r,y=cy+Math.sin(a)*r;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
+      ctx.closePath();ctx.strokeStyle='#4a3520';ctx.lineWidth=1;ctx.stroke();
+    }
+
+    function renderInfo(school) {
+      const data = SCHOOLS[school];
+      if (!data) return;
+      document.getElementById('infoName').textContent = school;
+      document.getElementById('infoSub').textContent = data.sub || '';
+
+      const list = document.getElementById('tierList');
+      list.innerHTML = '';
+
+      data.tiers.forEach(tier => {
+        const li = document.createElement('li');
+        li.className = 'tier-row';
+        li.innerHTML = `
+          <span class="tier-label" style="color:${data.color}">${tier.t}</span>
+          <span class="tier-divider"></span>
+          <span class="tier-content">
+            <button class="gem-link" data-gem="${tier.gem}">${tier.gem}</button>
+            <span class="tier-desc">${tier.desc}</span>
+          </span>`;
+        list.appendChild(li);
+      });
+
+      if (data.special) {
+        const li = document.createElement('li');
+        li.className = 'tier-row tier-special';
+        li.innerHTML = `
+          <span class="tier-label" style="color:#c49020">Special</span>
+          <span class="tier-divider"></span>
+          <span class="tier-content">
+            <button class="gem-link" data-gem="${data.special.gem}">${data.special.gem}</button>
+            <span class="tier-desc">${data.special.desc}</span>
+          </span>`;
+        list.appendChild(li);
+      }
+
+      if (data.tiers.length === 0) {
+        list.innerHTML = '<li style="padding:0.6rem 0;font-size:0.85rem;font-style:italic;color:var(--muted);">Gemstone tiers not yet documented.</li>';
+      }
+
+      const noteEl = document.getElementById('infoNote');
+      if (data.note) {
+        noteEl.textContent = data.note;
+        noteEl.style.display = 'block';
+      } else {
+        noteEl.style.display = 'none';
+      }
+
+      document.getElementById('schoolInfo').classList.add('visible');
+    }
+
+    let activeSchool = null;
+
+    function selectSchool(school) {
+      document.querySelectorAll('.school-btn').forEach(b => b.classList.remove('active'));
+      hideGem();
+
+      if (activeSchool === school) {
+        activeSchool = null;
+        document.getElementById('schoolInfo').classList.remove('visible');
+        return;
+      }
+
+      activeSchool = school;
+      const btn = document.querySelector(`[data-school="${school}"]`);
+      if (btn) btn.classList.add('active');
+
+      renderInfo(school);
+    }
+
+    document.querySelectorAll('.school-btn').forEach(btn => {
+      btn.addEventListener('click', () => selectSchool(btn.dataset.school));
+    });
+
+
+    // ── Altar owner toggle ──
+    var ALTAR_IMAGES = {
+      nestor:   'images/altar-nestor.jpg',
+      pelagiya: 'images/altar-pelagiya.jpg'
+    };
+
+    (function () {
+      var toggle = document.getElementById('altarToggle');
+      if (!toggle) return;
+      var base = document.getElementById('altarBase');
+      toggle.querySelectorAll('.altar-toggle-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var owner = btn.dataset.altar;
+          toggle.querySelectorAll('.altar-toggle-btn').forEach(function (b) {
+            b.classList.remove('active');
+          });
+          btn.classList.add('active');
+          if (base) {
+            base.style.display = '';
+            base.src = ALTAR_IMAGES[owner];
+          }
+        });
+      });
+    })();
+
+
+    /* ── Pill row arrows ── */
+    (function () {
+      var prev = document.getElementById('schoolPrev');
+      var next = document.getElementById('schoolNext');
+      var pills = Array.prototype.slice.call(document.querySelectorAll('.school-btn'));
+      if (pills.length < 2) {
+        if (prev) prev.style.display = 'none';
+        if (next) next.style.display = 'none';
+        return;
+      }
+      function step(dir) {
+        var i = pills.findIndex(function (p) { return p.classList.contains('active'); });
+        var n = (i === -1)
+          ? (dir > 0 ? 0 : pills.length - 1)
+          : (i + dir + pills.length) % pills.length;   /* wraps around */
+        var btn = pills[n];
+        selectSchool(btn.dataset.school);
+        if (btn.scrollIntoView) {
+          btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+      }
+      prev.addEventListener('click', function () { step(-1); });
+      next.addEventListener('click', function () { step(1); });
+    })();
+
+    /* ── Gemstone popup ── */
+    function gemSlug(name) {
+      return name.toLowerCase().replace(/[^a-z]/g, '');
+    }
+
+    /* Stand-in art while the per-gem PNGs are being made. If a gem's own
+       image is missing, the popup falls back to the school's image here.
+       Add or remove entries freely; delete the object to disable. */
+    const DUMMY_GEMS = {
+      Vohnomancy: 'images/gem-vohnomancy.png'
+    };
+
+    /* Per-gem colours for the drawn stand-in. Without an entry here the
+       drawn gem falls back to its school's colour. */
+    const GEM_DUMMY_COLORS = {
+      'Sunstone': '#e8b84a'
+    };
+
+    var gemImgEl = document.getElementById('gemOnAltar');
+    var activeGem = null;
+
+    function hideGem() {
+      activeGem = null;
+      if (gemImgEl) gemImgEl.classList.remove('visible');
+      var gp = document.getElementById('gemPlaceholder');
+      if (gp) gp.classList.remove('visible');
+      document.querySelectorAll('.gem-link').forEach(function (l) { l.classList.remove('active'); });
+      var ph = document.getElementById('altarPlaceholder');
+      if (ph) ph.style.display = '';
+    }
+
+    function showGem(gem, btn) {
+      if (activeGem === gem) { hideGem(); return; }
+      activeGem = gem;
+      document.querySelectorAll('.gem-link').forEach(function (l) { l.classList.remove('active'); });
+      if (btn) btn.classList.add('active');
+
+      var fallback = DUMMY_GEMS[activeSchool] || null;
+      gemImgEl.onerror = function () {
+        if (fallback && this.src.indexOf(fallback) === -1) {
+          this.src = fallback;
+          return;
+        }
+        /* no artwork yet — fall back to the drawn gem from the old version */
+        this.classList.remove('visible');
+        var canvas = document.getElementById('cGemPreview');
+        if (canvas) {
+          drawGem(canvas, GEM_DUMMY_COLORS[gem] || GEM_COLORS[activeSchool] || '#c8923a');
+          document.getElementById('gemPlaceholder').classList.add('visible');
+          var ph = document.getElementById('altarPlaceholder');
+          if (ph) ph.style.display = 'none';
+        }
+      };
+      var gpEl = document.getElementById('gemPlaceholder');
+      if (gpEl) gpEl.classList.remove('visible');
+      gemImgEl.onload = function () {
+        var ph = document.getElementById('altarPlaceholder');
+        if (ph) ph.style.display = 'none';   /* gem replaces the prompt */
+        this.classList.add('visible');
+      };
+      gemImgEl.alt = gem;
+      gemImgEl.src = 'images/gem-' + gemSlug(gem) + '.png';
+    }
+
+    (function () {
+      var list = document.getElementById('tierList');
+      if (!list) return;
+      list.addEventListener('click', function (e) {
+        var b = e.target.closest('.gem-link');
+        if (b) showGem(b.dataset.gem, b);
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') hideGem();
+      });
+    })();
+
+    drawAltarStar();
+  </script>
+
+
+  <script>
+    (function() {
+      var LANG_MAP = {
+        'index.html':         'index-ua.html',
+        'gemstones.html':     'gemstones-ua.html',
+        'characters.html':    'characters-ua.html',
+        'team.html':          'team-ua.html',
+        'index-ua.html':      'index.html',
+        'gemstones-ua.html':  'gemstones.html',
+        'characters-ua.html': 'characters.html',
+        'team-ua.html':       'team.html',
+      };
+
+      function getCurrentPage() {
+        var path = window.location.pathname;
+        return path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+      }
+
+      function isUAPage() {
+        return getCurrentPage().endsWith('-ua.html') ||
+               getCurrentPage().includes('-ua/');
+      }
+
+      window.switchLang = function(lang) {
+        localStorage.setItem('zelkyr-lang', lang);
+        var page = getCurrentPage();
+        var dest;
+        if (page.includes('chapter-')) {
+          dest = lang === 'ua'
+            ? page.replace(/(-ua)?\.html$/, '-ua.html')
+            : page.replace('-ua.html', '.html');
+        } else {
+          dest = lang === 'ua'
+            ? (LANG_MAP[page] && LANG_MAP[page].endsWith('-ua.html') ? LANG_MAP[page] : page.replace('.html', '-ua.html'))
+            : (LANG_MAP[page] && !LANG_MAP[page].endsWith('-ua.html') ? LANG_MAP[page] : page.replace('-ua.html', '.html'));
+        }
+        if (dest && dest !== page) window.location.href = dest;
+      };
+
+      // Set active button
+      var ua = isUAPage();
+      var btnEn = document.getElementById('btn-en');
+      var btnUa = document.getElementById('btn-ua');
+      if (btnEn) btnEn.classList.toggle('active', !ua);
+      if (btnUa) btnUa.classList.toggle('active', ua);
+
+      // Auto-redirect based on saved language — use flag to prevent loops
+      var saved = localStorage.getItem('zelkyr-lang');
+      if (saved && !sessionStorage.getItem('lang-redirected')) {
+        var ua = isUAPage();
+        if (saved === 'ua' && !ua) {
+          sessionStorage.setItem('lang-redirected', '1');
+          switchLang('ua');
+        } else if (saved === 'en' && ua) {
+          sessionStorage.setItem('lang-redirected', '1');
+          switchLang('en');
+        }
+      }
+    })();
+  </script>
+</body>
+</html>
