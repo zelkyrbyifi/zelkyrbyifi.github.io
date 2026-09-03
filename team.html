@@ -124,8 +124,6 @@
 
     @media (max-width: 640px) {
       .team-grid {
-        /* minmax(0,1fr) — plain 1fr has an auto minimum, so a long
-           unbreakable role string widens its column and breaks the grid */
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 1.2rem;
       }
@@ -437,7 +435,7 @@
       if (btnEn) btnEn.classList.toggle('active', !ua);
       if (btnUa) btnUa.classList.toggle('active', ua);
 
-      // Auto-redirect based on saved language — use flag to prevent loops
+      // Auto-redirect based on saved language
       var saved = localStorage.getItem('zelkyr-lang');
       if (saved && !sessionStorage.getItem('lang-redirected')) {
         var ua = isUAPage();
