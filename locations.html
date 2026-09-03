@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+
+<!--
+  "Zelkyr" — www.zelkyr.com
+  Built by Ifigeniya
+  Last updated: 09/02/2026
+  All rights reserved
+-->
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -11,7 +19,6 @@
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
   <style>
-    /* Widen container to match the gemstones page */
     .site-wrap { max-width: 1100px; }
 
     /* ── Page layout ── */
@@ -27,7 +34,6 @@
       position: relative;
       width: 100%;
       max-width: 100%;
-      /* only a floor for the placeholder state — the image sets the height */
       min-height: 260px;
       margin: 0 auto;
       line-height: 0;
@@ -58,7 +64,6 @@
 
     .portrait-img { transition: opacity 0.5s ease; }
 
-    /* Base image defines the banner height */
     .portrait-base {
       position: relative;
       display: block;
@@ -68,7 +73,6 @@
       z-index: 1;
       opacity: 1;
     }
-    /* Overlays sit on top, matched to the base image box */
 
     /* Placeholder when no image */
     .portrait-placeholder {
@@ -172,7 +176,6 @@
       background: #1a130d;
     }
     .char-arrow:active { background: #1e1508; }
-    /* only one entry to move between */
     .char-arrow.is-lonely { opacity: 0.4; }
 
 
@@ -407,8 +410,6 @@
       const btn = document.querySelector('[data-key="' + key + '"]');
       if (btn) btn.classList.add('active');
 
-      /* The chosen image becomes the base, so the frame takes its shape and
-         the art fills it edge to edge — same as the altar page. */
       if (base) {
         base.onerror = function () {
           this.style.display = 'none';
@@ -433,16 +434,13 @@
     // ── Arrow navigation through characters ──
     function stepChar(dir) {
       var idx = CHARACTERS.findIndex(function(c){ return c.key === activeChar; });
-      // If nothing selected yet, start at the first (dir>0) or last (dir<0)
       if (idx === -1) {
         idx = dir > 0 ? 0 : CHARACTERS.length - 1;
       } else {
         idx = (idx + dir + CHARACTERS.length) % CHARACTERS.length;
       }
       var key = CHARACTERS[idx].key;
-      // selectChar toggles off if same key — guard against that here
       if (activeChar === key) return;
-      // If activeChar is set and we'd re-trigger toggle, clear first
       selectChar(key);
       scrollActiveIntoView(key);
     }
@@ -457,8 +455,6 @@
     (function () {
       var prev = document.getElementById('charPrev');
       var next = document.getElementById('charNext');
-      // Arrows stay visible even with a single entry; with one location they
-      // simply select it. They dim so it's clear there's nowhere else to go.
       if (CHARACTERS.length < 2) {
         if (prev) prev.classList.add('is-lonely');
         if (next) next.classList.add('is-lonely');
@@ -517,7 +513,7 @@
       if (btnEn) btnEn.classList.toggle('active', !ua);
       if (btnUa) btnUa.classList.toggle('active', ua);
 
-      // Auto-redirect based on saved language — use flag to prevent loops
+      // Auto-redirect based on saved language
       var saved = localStorage.getItem('zelkyr-lang');
       if (saved && !sessionStorage.getItem('lang-redirected')) {
         var ua = isUAPage();
