@@ -3,7 +3,7 @@
 <!--
   "Zelkyr" — www.zelkyr.com
   Built by Ifigeniya
-  Last updated: 06/19/2025
+  Last updated: 09/02/2026
   All rights reserved
 -->
 
@@ -92,14 +92,11 @@
       filter: drop-shadow(0 0 80px #e8b84a44) drop-shadow(0 0 160px #c8923a22);
     }
 
-    /* Short windows: tighten the stack so the larger title still fits
-       without the splash needing to scroll */
     @media (max-height: 800px) {
       #splash { gap: 1.2rem; padding: 1.2rem 1rem; }
     }
 
-    /* Mobile: the artwork is wide (~1.94:1), so width is the binding
-       constraint on a portrait screen — go edge to edge */
+    /* Mobile */
     @media (max-width: 640px) {
       #splash { padding: 2rem 0; }
       .splash-title { padding: 0; width: 100%; }
@@ -112,8 +109,6 @@
     /* Header title image */
     .site-title img {
       display: block;
-      /* trimmed artwork fills the box edge to edge, so the cap is ~85% of
-         what it was with the untrimmed PNG — same apparent size */
       width: min(76vw, 930px);
       max-width: none;
       height: auto;
@@ -342,7 +337,7 @@
       </div>
     </nav>
 
-    <!-- Decorative star buffer -->
+    <!-- Decorative star -->
     <div class="star-buffer">
       <canvas id="star-canvas" width="340" height="340"></canvas>
     </div>
@@ -431,7 +426,6 @@
 
   <script>
     function toggleDropdown() {
-      // Use CSS breakpoint to decide behaviour
       if (window.matchMedia('(max-width: 640px)').matches) {
         var o = document.getElementById('glossaryOverlay');
         o.classList.toggle('open');
@@ -526,7 +520,7 @@
         }
       }
 
-      // Music button — play if paused, mute/unmute if playing
+      // Music button
       btn.addEventListener('click', function(e) {
         e.stopPropagation();
         if (audio.paused) {
@@ -638,7 +632,7 @@
       if (btnEn) btnEn.classList.toggle('active', !ua);
       if (btnUa) btnUa.classList.toggle('active', ua);
 
-      // Auto-redirect based on saved language — use flag to prevent loops
+      // Auto-redirect based on saved language
       var saved = localStorage.getItem('zelkyr-lang');
       if (saved && !sessionStorage.getItem('lang-redirected')) {
         var ua = isUAPage();
