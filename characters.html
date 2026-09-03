@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+
+<!--
+  "Zelkyr" — www.zelkyr.com
+  Built by Ifigeniya
+  Last updated: 09/02/2026
+  All rights reserved
+-->
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -23,8 +31,6 @@
     .portrait-frame {
       position: relative;
       width: 100%;
-      /* no fixed aspect-ratio — the portrait itself sets the height so the
-         frame hugs it instead of letterboxing */
       max-width: 420px;
       min-height: 260px;
       margin: 0 auto;
@@ -56,7 +62,6 @@
 
     .portrait-img { transition: opacity 0.5s ease; }
 
-    /* The portrait defines the frame's height */
     .portrait-base {
       position: relative;
       display: block;
@@ -420,8 +425,6 @@
       const btn = document.querySelector('[data-key="' + key + '"]');
       if (btn) btn.classList.add('active');
 
-      /* The chosen portrait becomes the base image, so the frame takes its
-         shape and the art fills it with no empty bars. */
       if (base) {
         base.onerror = function () {
           this.style.display = 'none';
@@ -446,16 +449,13 @@
     // ── Arrow navigation through characters ──
     function stepChar(dir) {
       var idx = CHARACTERS.findIndex(function(c){ return c.key === activeChar; });
-      // If nothing selected yet, start at the first (dir>0) or last (dir<0)
       if (idx === -1) {
         idx = dir > 0 ? 0 : CHARACTERS.length - 1;
       } else {
         idx = (idx + dir + CHARACTERS.length) % CHARACTERS.length;
       }
       var key = CHARACTERS[idx].key;
-      // selectChar toggles off if same key — guard against that here
       if (activeChar === key) return;
-      // If activeChar is set and we'd re-trigger toggle, clear first
       selectChar(key);
       scrollActiveIntoView(key);
     }
@@ -524,7 +524,7 @@
       if (btnEn) btnEn.classList.toggle('active', !ua);
       if (btnUa) btnUa.classList.toggle('active', ua);
 
-      // Auto-redirect based on saved language — use flag to prevent loops
+      // Auto-redirect based on saved language 
       var saved = localStorage.getItem('zelkyr-lang');
       if (saved && !sessionStorage.getItem('lang-redirected')) {
         var ua = isUAPage();
