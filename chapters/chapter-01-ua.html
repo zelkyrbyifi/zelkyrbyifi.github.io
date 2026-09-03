@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+
+<!--
+  "Zelkyr" — www.zelkyr.com
+  Built by Ifigeniya
+  Last updated: 09/02/2026
+  All rights reserved
+-->
+
 <html lang="uk">
 <head>
   <meta charset="UTF-8" />
@@ -401,8 +409,7 @@
       if (next && next.tagName === 'P') next.style.textIndent = '2em';
     });
 
-    // Dialogue drop-cap: if the first paragraph starts with an em dash,
-    // wrap the dash + first letter so they enlarge together as one drop cap.
+    // Dialogue drop-cap
     (function () {
       var first = document.querySelector('.chapter-body p:first-child');
       if (!first) return;
@@ -418,7 +425,7 @@
     })();
 
 
-    // Illustrated hotword system
+    // Illustrated hotword 
     var activePopup = null;
 
     function closeIllus() {
@@ -457,8 +464,6 @@
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') { closeIllus(); removePopup(); }
     });
-
-    // Remove popup when tapping anywhere outside the word or icon
     document.addEventListener('click', function(e) {
       if (activePopup && !e.target.closest('.illus-word') && !e.target.closest('.illus-popup')) {
         removePopup();
@@ -512,7 +517,7 @@
       if (btnEn) btnEn.classList.toggle('active', !ua);
       if (btnUa) btnUa.classList.toggle('active', ua);
 
-      // Auto-redirect based on saved language — use flag to prevent loops
+      // Auto-redirect based on saved language
       var saved = localStorage.getItem('zelkyr-lang');
       if (saved && !sessionStorage.getItem('lang-redirected')) {
         var ua = isUAPage();
