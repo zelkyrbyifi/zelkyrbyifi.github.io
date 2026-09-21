@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+
+<!--
+  "Zelkyr" — www.zelkyr.com
+  Built by Ifigeniya
+  404 page — GitHub Pages serves this automatically for any missing URL.
+  All paths are root-relative (/…) because this page can be shown at any
+  depth, e.g. /chapters/missing.html.
+-->
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Page not found · Zelkyr</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <!-- Google Analytics — lets you see which broken links people hit -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-04HKWR5P71"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-04HKWR5P71');
+  </script>
+
+  <!-- Pick the reader's language before anything paints -->
+  <script>
+    (function () {
+      var lang = null;
+      try { lang = localStorage.getItem('zelkyr-lang'); } catch (e) {}
+      if (!lang) {
+        if (location.pathname.indexOf('-ua') !== -1) lang = 'ua';
+        else if ((navigator.language || '').toLowerCase().indexOf('uk') === 0) lang = 'ua';
+        else lang = 'en';
+      }
+      document.documentElement.lang = (lang === 'ua') ? 'uk' : 'en';
+      document.documentElement.classList.add('lang-' + lang);
+      if (lang === 'ua') document.title = 'Сторінку не знайдено · Зелкир';
+    })();
+  </script>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&display=swap" />
+  <style>
+    /* Self-contained on purpose: an error page should still render even if
+       the main stylesheet is missing or mid-update. */
+    @font-face {
+      font-family: 'Kyiv Region';
+      src: url('/KyivRegion-Regular.woff2') format('woff2'),
+           url('/KyivRegion-Regular.woff') format('woff');
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Tsybulka';
+      src: url('/Tsybulka-Regular.woff2') format('woff2'),
+           url('/Tsybulka-Regular.ttf') format('truetype');
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Horobets';
+      src: url('/Horobets-Regular.woff2') format('woff2'),
+           url('/Horobets-Regular.ttf') format('truetype');
+      font-display: swap;
+    }
+
+    :root {
+      --bg:       #080705;
+      --gold:     #c8923a;
+      --gold2:    #e8b84a;
+      --gold-dim: #7a5a22;
+      --text:     #cfc0a0;
+      --border2:  #4a3520;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { height: 100%; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Lora', serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+      text-align: center;
+    }
+
+    .err {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.4rem;
+      max-width: 36rem;
+    }
+
+    /* the kalyna breaking a hairline — same motif as the index */
+    .err-orn {
+      font-family: 'Tsybulka', serif;
+      font-size: 1.4rem;
+      letter-spacing: 0;          /* ligature won't fire with tracking */
+      line-height: 1;
+      color: var(--gold-dim);
+      width: 250px;
+      background:
+        linear-gradient(to right, transparent, var(--border2)) 0 50% / 95px 1px no-repeat,
+        linear-gradient(to left,  transparent, var(--border2)) 100% 50% / 95px 1px no-repeat;
+    }
+
+    .err-title {
+      font-family: 'Kyiv Region', serif;
+      font-weight: 400;
+      font-size: clamp(1.6rem, 5vw, 2.6rem);
+      line-height: 1.2;
+      color: var(--gold2);
+      letter-spacing: 0.04em;
+    }
+
+    .err-text {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      max-width: 34ch;
+    }
+
+    .err-btn {
+      margin-top: 0.6rem;
+      font-family: 'Horobets', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold2);
+      text-decoration: none;
+      border: 1px solid var(--gold);
+      padding: 0.9rem 2rem;
+      transition: color 0.25s, border-color 0.25s, box-shadow 0.25s;
+    }
+    .err-btn:hover,
+    .err-btn:focus-visible {
+      color: #fff3d6;
+      border-color: var(--gold2);
+      box-shadow: 0 0 24px #e8b84a55;
+      outline: none;
+    }
+
+    /* show only the reader's language; without JS both remain visible */
+    .lang-en .ua,
+    .lang-ua .en { display: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .err-btn { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="err">
+    <div class="err-orn" aria-hidden="true">*калина*</div>
+
+    <h1 class="err-title en">This page doesn't exist</h1>
+    <h1 class="err-title ua">Цієї сторінки не існує</h1>
+
+    <p class="err-text en">The link may be out of date, or the page may have moved.</p>
+    <p class="err-text ua">Посилання могло застаріти, або сторінку перенесли.</p>
+
+    <a class="err-btn en" href="/index.html">Return to Zelkyr</a>
+    <a class="err-btn ua" href="/index-ua.html">Повернутися до Зелкиру</a>
+  </main>
+
+</body>
+</html>
